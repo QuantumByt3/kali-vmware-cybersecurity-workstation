@@ -1,0 +1,64 @@
+# Normalize text files automatically
+* text=auto eol=lf
+
+# Windows command files
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# PowerShell
+*.ps1 text eol=lf
+*.psm1 text eol=lf
+*.psd1 text eol=lf
+
+# Linux / Bash
+*.sh text eol=lf
+*.bash text eol=lf
+*.zsh text eol=lf
+
+# Documentation
+*.md text eol=lf
+*.txt text eol=lf
+
+# Structured configuration
+*.json text eol=lf
+*.yaml text eol=lf
+*.yml text eol=lf
+*.toml text eol=lf
+*.ini text eol=lf
+*.conf text eol=lf
+
+# Source code
+*.py text eol=lf
+
+# Images
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.svg text eol=lf
+
+# Archives
+*.zip binary
+*.7z binary
+*.rar binary
+*.gz binary
+*.tgz binary
+
+# Virtualization / disk images
+*.vmdk binary
+*.vhd binary
+*.vhdx binary
+*.qcow2 binary
+*.iso binary
+*.img binary
+
+# Packet captures / forensic artifacts
+*.pcap binary
+*.pcapng binary
+*.cap binary
+*.evtx binary
+*.pml binary
+*.dmp binary
+*.raw binary
+*.mem binary

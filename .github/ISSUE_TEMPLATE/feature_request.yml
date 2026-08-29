@@ -1,0 +1,204 @@
+name: Feature request
+description: Suggest a focused improvement to the repository, documentation, validation, or tooling
+title: "[Feature]: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for suggesting an improvement.
+
+        Feature requests should support the repository's goal of providing a beginner-friendly, reproducible, and security-conscious Kali VMware workstation for authorized cybersecurity use.
+
+        **Do not use a public feature request to disclose vulnerabilities, secrets, private network information, or other sensitive data.** Follow the repository's [Security Policy](../../SECURITY.md) for sensitive reports.
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Proposed area
+      description: Select the repository area most closely related to your request.
+      options:
+        - Windows host readiness
+        - VMware Workstation installation
+        - Kali download or verification
+        - Kali VM import or configuration
+        - Kali first boot or account security
+        - Kali update workflow
+        - Snapshot or recovery workflow
+        - Kali security baseline
+        - Directory organization
+        - Core tools
+        - CTF tools
+        - Web-security tools
+        - Browser or proxy workflow
+        - Network or Active Directory tools
+        - Blue-team or DFIR tools
+        - Development environment
+        - Workspace helpers
+        - VMware networking
+        - Maintenance or recovery
+        - Windows PowerShell automation
+        - Kali Bash automation
+        - Repository validation
+        - Documentation
+        - GitHub workflow or repository metadata
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem or limitation
+      description: Describe the problem the proposed feature would solve.
+      placeholder: |
+        What is difficult, missing, repetitive, unclear, or error-prone today?
+        Explain the user need before describing the implementation.
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed improvement
+      description: Describe the feature or change you would like to see.
+      placeholder: |
+        Explain the proposed behavior, workflow, documentation, or automation.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: audience
+    attributes:
+      label: Primary audience
+      description: Who would benefit most from this change?
+      options:
+        - Beginners
+        - General repository users
+        - CTF learners
+        - Web-security learners
+        - Network or Active Directory learners
+        - Blue-team learners
+        - DFIR learners
+        - Contributors or maintainers
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: required_or_optional
+    attributes:
+      label: Should this be required or optional?
+      description: Indicate whether the proposal belongs in the baseline workstation or an optional profile/workflow.
+      options:
+        - Required baseline
+        - Optional profile or workflow
+        - Documentation only
+        - Unsure
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Describe other approaches you considered and why they are less suitable.
+      placeholder: |
+        Example:
+        - Existing repository tool or workflow
+        - Built-in Windows/Kali capability
+        - Another package
+        - Manual process
+
+  - type: input
+    id: upstream
+    attributes:
+      label: Official upstream source
+      description: If the proposal adds or changes a third-party tool, provide the official project or vendor URL.
+      placeholder: "https://..."
+
+  - type: input
+    id: license
+    attributes:
+      label: Third-party license
+      description: If the proposal adds a dependency, identify its license when known.
+      placeholder: "Example: MIT, GPL-3.0, Apache-2.0"
+
+  - type: textarea
+    id: dependency_impact
+    attributes:
+      label: Dependency and security impact
+      description: If the feature adds software, privileges, network exposure, or other security-relevant behavior, explain it here.
+      placeholder: |
+        Consider:
+        - New packages or binaries
+        - Administrator/sudo requirements
+        - Network listeners
+        - Firewall changes
+        - Host/guest integration
+        - External services
+        - Secrets or credentials
+
+  - type: textarea
+    id: beginner_impact
+    attributes:
+      label: Beginner impact
+      description: Explain whether the feature makes the repository easier or harder for a first-time user.
+      placeholder: |
+        Does this add complexity?
+        Can the feature be optional?
+        What documentation would be required?
+
+  - type: textarea
+    id: validation
+    attributes:
+      label: How should this be validated?
+      description: Describe objective checks that could confirm the feature works correctly.
+      placeholder: |
+        Example:
+        - Parser/linter check
+        - Runtime validation
+        - Idempotency test
+        - Internal-link validation
+        - Network-readiness check
+
+  - type: textarea
+    id: additional_context
+    attributes:
+      label: Additional context
+      description: Add any other sanitized information that would help evaluate the request.
+
+  - type: checkboxes
+    id: scope
+    attributes:
+      label: Scope confirmation
+      options:
+        - label: This request supports authorized cybersecurity education, labs, CTFs, defensive security, DFIR, or workstation maintenance.
+          required: true
+        - label: I considered whether the feature can remain optional instead of expanding the required baseline.
+          required: true
+        - label: If this request introduces third-party software, I identified the official source and licensing considerations when known.
+          required: false
+
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: Safety and privacy confirmation
+      options:
+        - label: I removed passwords, tokens, keys, private paths, private IP addresses, MAC addresses, hostnames, VPN information, and other sensitive data.
+          required: true
+        - label: This request does not contain vulnerability details that should be reported privately under the Security Policy.
+          required: true
+        - label: Any cybersecurity testing described here is limited to systems or environments I own or am explicitly authorized to test.
+          required: true
+
+  - type: checkboxes
+    id: quality
+    attributes:
+      label: Request quality confirmation
+      options:
+        - label: I searched existing issues before submitting this request.
+          required: true
+        - label: I reviewed the relevant repository documentation before proposing this change.
+          required: true
+        - label: The request is focused on a specific problem or improvement rather than simply adding more tools.
+          required: true

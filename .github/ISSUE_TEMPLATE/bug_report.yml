@@ -1,0 +1,217 @@
+name: Bug report
+description: Report a reproducible problem with the repository, documentation, or scripts
+title: "[Bug]: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for taking the time to report a problem.
+
+        Use this form for ordinary, non-sensitive bugs.
+
+        **Do not use a public issue to report a security vulnerability, exposed credential, private key, token, private network information, or other sensitive data.** Follow the repository's [Security Policy](../../SECURITY.md) instead.
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Affected area
+      description: Select the part of the repository where the problem occurs.
+      options:
+        - Windows host readiness
+        - VMware Workstation installation
+        - Kali download or hash verification
+        - Kali VM extraction or import
+        - VMware VM configuration
+        - Kali first boot or account security
+        - Kali update workflow
+        - VMware snapshots
+        - Kali security baseline
+        - Directory organization
+        - Core tools
+        - CTF tools
+        - Web-security tools
+        - Browser or proxy workflow
+        - Network or Active Directory tools
+        - Blue-team or DFIR tools
+        - Development environment
+        - Workspace helpers
+        - VMware networking
+        - Maintenance or recovery
+        - Windows PowerShell script
+        - Kali Bash script
+        - Documentation
+        - Repository validation
+        - GitHub workflow or repository metadata
+        - Other
+    validations:
+      required: true
+
+  - type: input
+    id: affected_file
+    attributes:
+      label: Affected file or script
+      description: If known, provide the repository-relative path.
+      placeholder: "Example: scripts/kali/Test-KaliReadiness.sh"
+
+  - type: input
+    id: repository_version
+    attributes:
+      label: Repository version or commit
+      description: Provide a release tag or commit hash when available.
+      placeholder: "Example: main at abc1234"
+
+  - type: dropdown
+    id: host_os
+    attributes:
+      label: Windows host
+      description: Select the Windows host version used when the issue occurred.
+      options:
+        - Windows 11
+        - Not applicable
+        - Other
+    validations:
+      required: true
+
+  - type: input
+    id: windows_details
+    attributes:
+      label: Windows version details
+      description: Provide the edition/build only if relevant. Do not include your Windows username or private path.
+      placeholder: "Example: Windows 11 Home, 24H2"
+
+  - type: input
+    id: vmware_version
+    attributes:
+      label: VMware Workstation Pro version
+      description: Provide the VMware version if the issue involves virtualization.
+      placeholder: "Example: 26.x"
+
+  - type: input
+    id: kali_version
+    attributes:
+      label: Kali version
+      description: Provide the Kali release or rolling version if relevant.
+      placeholder: "Example: Kali 2026.2 or Kali Rolling"
+
+  - type: input
+    id: architecture
+    attributes:
+      label: Architecture
+      description: Provide the architecture if relevant.
+      placeholder: "Example: amd64"
+
+  - type: textarea
+    id: summary
+    attributes:
+      label: Problem summary
+      description: Clearly describe what is wrong.
+      placeholder: |
+        Describe the problem in a few sentences.
+        Explain where in the documented workflow it occurs.
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: What did you expect to happen?
+      placeholder: "Describe the expected result."
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      description: What happened instead?
+      placeholder: "Describe the actual result or error."
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction steps
+      description: Provide the smallest safe sequence that reproduces the problem.
+      placeholder: |
+        1. Open...
+        2. Run...
+        3. Observe...
+    validations:
+      required: true
+
+  - type: textarea
+    id: command
+    attributes:
+      label: Relevant command
+      description: Include a command only when it helps reproduce the problem. Remove usernames, tokens, IP addresses, hostnames, and other private values.
+      render: shell
+
+  - type: textarea
+    id: output
+    attributes:
+      label: Sanitized output or error
+      description: Paste only the output needed to diagnose the issue. Remove all secrets and private environment details.
+      render: shell
+
+  - type: textarea
+    id: troubleshooting
+    attributes:
+      label: Troubleshooting already attempted
+      description: Describe what you already checked or changed.
+      placeholder: |
+        Example:
+        - Re-ran the repository validator
+        - Confirmed the VM is powered off
+        - Confirmed the file checksum
+
+  - type: dropdown
+    id: regression
+    attributes:
+      label: Did this work previously?
+      description: Indicate whether the same workflow worked before.
+      options:
+        - "Yes"
+        - "No"
+        - Unsure
+        - Not applicable
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional_context
+    attributes:
+      label: Additional context
+      description: Add other sanitized information that is necessary to understand the problem.
+
+  - type: markdown
+    attributes:
+      value: |
+        ### Before submitting
+
+        Review the information above carefully. Public GitHub issues can be visible to anyone.
+
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: Safety and privacy confirmation
+      options:
+        - label: I removed passwords, tokens, keys, private paths, private IP addresses, MAC addresses, hostnames, VPN information, and other sensitive data from this report.
+          required: true
+        - label: This issue does not contain private vulnerability details that should be reported through the repository Security Policy.
+          required: true
+        - label: Any cybersecurity testing described in this report was performed in an environment I own or was explicitly authorized to test.
+          required: true
+
+  - type: checkboxes
+    id: contribution_checks
+    attributes:
+      label: Issue quality confirmation
+      options:
+        - label: I reviewed the documentation relevant to this issue.
+          required: true
+        - label: I searched existing issues before submitting this report.
+          required: true
+        - label: I have provided enough information to reproduce or investigate the problem.
+          required: true

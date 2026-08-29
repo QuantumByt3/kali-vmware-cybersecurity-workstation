@@ -1,0 +1,179 @@
+name: Documentation issue
+description: Report unclear, inaccurate, outdated, or broken documentation
+title: "[Docs]: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for helping improve the documentation.
+
+        Use this form for documentation problems that do not expose sensitive security information.
+
+        **Do not post passwords, tokens, keys, private network details, private paths, or vulnerability details in a public issue.** Follow the repository's [Security Policy](../../SECURITY.md) for sensitive reports.
+
+  - type: dropdown
+    id: documentation_area
+    attributes:
+      label: Documentation area
+      description: Select the guide or repository area that needs attention.
+      options:
+        - README
+        - Windows host readiness
+        - VMware Workstation installation
+        - Kali download and verification
+        - Kali VM extraction and import
+        - VMware VM configuration
+        - First boot and account security
+        - Kali update
+        - Baseline snapshot
+        - Kali security baseline
+        - Directory organization
+        - Core tools
+        - CTF tools
+        - Web-security tools
+        - Browser and proxy workflow
+        - Network and Active Directory tools
+        - Blue-team and DFIR tools
+        - Development environment
+        - Workspace helpers
+        - VMware networking
+        - Maintenance and recovery
+        - Security policy
+        - Contributing guidelines
+        - Code of Conduct
+        - Third-party notices
+        - Changelog
+        - Other
+    validations:
+      required: true
+
+  - type: input
+    id: affected_file
+    attributes:
+      label: Affected file
+      description: Provide the repository-relative file path when known.
+      placeholder: "Example: docs/05-configure-kali-vm.md"
+
+  - type: input
+    id: section
+    attributes:
+      label: Section or heading
+      description: Identify the heading, step, or approximate location of the problem.
+      placeholder: "Example: Processor Recommendations"
+
+  - type: dropdown
+    id: issue_type
+    attributes:
+      label: Documentation problem
+      description: Select the type that best describes the issue.
+      options:
+        - Incorrect technical information
+        - Outdated information
+        - Missing prerequisite
+        - Missing step
+        - Unclear explanation
+        - Broken internal link
+        - Broken external link
+        - Command or path mismatch
+        - Screenshot or interface mismatch
+        - Formatting or rendering issue
+        - Accessibility or readability issue
+        - Typographical or grammar issue
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: What is wrong?
+      description: Describe the documentation problem clearly.
+      placeholder: |
+        Explain what is inaccurate, unclear, outdated, or missing.
+        Include enough context for a maintainer to locate the issue.
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What should the documentation say or do instead?
+      description: Describe the expected correction or improvement.
+      placeholder: "Explain the corrected behavior, wording, path, command, or sequence."
+    validations:
+      required: true
+
+  - type: textarea
+    id: source
+    attributes:
+      label: Supporting source
+      description: If the issue depends on current product behavior, provide an official source when possible.
+      placeholder: |
+        Example:
+        - Official Kali documentation
+        - Broadcom VMware documentation
+        - Microsoft documentation
+        - Upstream project documentation
+
+  - type: input
+    id: source_url
+    attributes:
+      label: Official source URL
+      description: Provide a direct official URL if one supports the correction.
+      placeholder: "https://..."
+
+  - type: input
+    id: repository_version
+    attributes:
+      label: Repository version or commit
+      description: Provide a release tag or commit hash when available.
+      placeholder: "Example: main at abc1234"
+
+  - type: input
+    id: environment
+    attributes:
+      label: Relevant environment
+      description: If the documentation mismatch is version-specific, provide the relevant Windows, VMware, or Kali version.
+      placeholder: "Example: Windows 11 24H2, VMware 26.x, Kali 2026.2"
+
+  - type: textarea
+    id: suggested_text
+    attributes:
+      label: Suggested wording
+      description: Optional. Provide a concise proposed correction if you have one.
+      placeholder: "Suggested replacement text or steps."
+
+  - type: textarea
+    id: additional_context
+    attributes:
+      label: Additional context
+      description: Add sanitized context that would help the maintainer evaluate the documentation issue.
+
+  - type: markdown
+    attributes:
+      value: |
+        ### Before submitting
+
+        Public issues are visible to others. Remove private or identifying information before submitting.
+
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: Privacy and security confirmation
+      options:
+        - label: I removed passwords, tokens, keys, private paths, private IP addresses, MAC addresses, hostnames, VPN information, and other sensitive data.
+          required: true
+        - label: This report does not contain vulnerability details that should be submitted privately under the Security Policy.
+          required: true
+
+  - type: checkboxes
+    id: quality
+    attributes:
+      label: Documentation issue confirmation
+      options:
+        - label: I verified that the issue exists in the current repository content.
+          required: true
+        - label: I searched existing issues before submitting this report.
+          required: true
+        - label: I used an official upstream source when the correction depends on current third-party behavior, when such a source is available.
+          required: false

@@ -1,0 +1,228 @@
+name: Validate Repository
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: validate-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: Repository Validation
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Show validation environment
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "Runner OS: $RUNNER_OS"
+          echo "Repository: $GITHUB_REPOSITORY"
+          echo "Commit: $GITHUB_SHA"
+          git --version
+          pwsh --version
+          bash --version | head -n 1
+
+      - name: Install ShellCheck
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install --yes shellcheck
+          shellcheck --version
+
+      - name: Validate PowerShell syntax
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+
+          $PowerShellFiles = @(
+              Get-ChildItem `
+                  -LiteralPath './scripts' `
+                  -Recurse `
+                  -File `
+                  -Filter '*.ps1'
+          )
+
+          $ParserFailures = 0
+
+          foreach ($File in $PowerShellFiles) {
+              $Tokens = $null
+              $Errors = $null
+
+              [System.Management.Automation.Language.Parser]::ParseFile(
+                  $File.FullName,
+                  [ref]$Tokens,
+                  [ref]$Errors
+              ) | Out-Null
+
+              if ($Errors.Count -eq 0) {
+                  Write-Host "[PASS] $($File.FullName)"
+              }
+
+              if ($Errors.Count -gt 0) {
+                  Write-Host "[FAIL] $($File.FullName)"
+
+                  $Errors | ForEach-Object {
+                      Write-Host "       $($_.Message)"
+                  }
+
+                  $ParserFailures++
+              }
+          }
+
+          $SettingsTokens = $null
+          $SettingsErrors = $null
+
+          [System.Management.Automation.Language.Parser]::ParseFile(
+              (Resolve-Path -LiteralPath './PSScriptAnalyzerSettings.psd1').Path,
+              [ref]$SettingsTokens,
+              [ref]$SettingsErrors
+          ) | Out-Null
+
+          if ($SettingsErrors.Count -eq 0) {
+              Write-Host '[PASS] PSScriptAnalyzerSettings.psd1'
+          }
+
+          if ($SettingsErrors.Count -gt 0) {
+              Write-Host '[FAIL] PSScriptAnalyzerSettings.psd1'
+
+              $SettingsErrors | ForEach-Object {
+                  Write-Host "       $($_.Message)"
+              }
+
+              $ParserFailures++
+          }
+
+          Write-Host "PowerShell files checked: $($PowerShellFiles.Count)"
+          Write-Host "Parser failures: $ParserFailures"
+
+          if ($ParserFailures -gt 0) {
+              exit 1
+          }
+
+      - name: Install PSScriptAnalyzer
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+
+          Set-PSRepository `
+              -Name PSGallery `
+              -InstallationPolicy Trusted
+
+          Install-Module `
+              -Name PSScriptAnalyzer `
+              -RequiredVersion '1.25.0' `
+              -Scope CurrentUser `
+              -Force `
+              -AllowClobber
+
+          $Module = Get-Module `
+              -ListAvailable `
+              -Name PSScriptAnalyzer |
+              Sort-Object Version -Descending |
+              Select-Object -First 1
+
+          if (-not $Module) {
+              throw 'PSScriptAnalyzer installation could not be verified.'
+          }
+
+          Write-Host "PSScriptAnalyzer version: $($Module.Version)"
+
+      - name: Run PSScriptAnalyzer
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+
+          $Results = @(
+              Invoke-ScriptAnalyzer `
+                  -Path './scripts' `
+                  -Recurse `
+                  -Settings './PSScriptAnalyzerSettings.psd1'
+          )
+
+          Write-Host "Analyzer findings: $($Results.Count)"
+
+          if ($Results.Count -gt 0) {
+              $Results |
+                  Select-Object `
+                      ScriptName,
+                      RuleName,
+                      Severity,
+                      Line,
+                      Message |
+                  Format-Table -AutoSize
+
+              exit 1
+          }
+
+          Write-Host '[PASS] PSScriptAnalyzer found no warnings or errors.'
+
+      - name: Validate Bash syntax
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          count=0
+
+          while IFS= read -r -d '' file; do
+            bash -n "$file"
+            echo "[PASS] $file"
+            count=$((count + 1))
+          done < <(find scripts -type f -name '*.sh' -print0 | sort -z)
+
+          echo "Bash files checked: $count"
+
+          if [ "$count" -eq 0 ]; then
+            echo "[FAIL] No Bash scripts were found."
+            exit 1
+          fi
+
+      - name: Run ShellCheck
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          mapfile -d '' files < <(
+            find scripts -type f -name '*.sh' -print0 |
+              sort -z
+          )
+
+          if [ "${#files[@]}" -eq 0 ]; then
+            echo "[FAIL] No Bash scripts were found."
+            exit 1
+          fi
+
+          shellcheck "${files[@]}"
+
+          echo "[PASS] ShellCheck completed successfully."
+          echo "Shell scripts checked: ${#files[@]}"
+
+      - name: Run repository safety validation
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+
+          & './scripts/windows/Test-RepositorySafety.ps1'
+
+          if ($LASTEXITCODE -ne 0) {
+              exit $LASTEXITCODE
+          }
+
+          Write-Host '[PASS] Repository safety validation completed successfully.'
