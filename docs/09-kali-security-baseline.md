@@ -239,4 +239,9 @@ Before continuing, verify:
 - [ ] Copy-and-paste is disabled unless required
 - [ ] Credentials and VPN profiles are treated as sensitive data
 
-The next step will create an automated Kali security-baseline audit script.
+Before Step 10 uses Kali-side repository scripts, return to Step 00 Part B
+and obtain or verify the repository inside Kali.
+
+Then continue to:
+
+[10 — Directory Organization](10-directory-organization.md)

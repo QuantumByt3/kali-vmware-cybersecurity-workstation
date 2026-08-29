@@ -194,4 +194,6 @@ Before continuing, verify:
 - [ ] Kali starts normally after the update
 - [ ] Release and kernel information can be displayed
 
-The next step will automate routine Kali update checks and maintenance.
+After Kali is updated and verified, continue to:
+
+[08 — Create the Baseline Snapshot](08-create-baseline-snapshot.md)
