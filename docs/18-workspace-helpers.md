@@ -32,8 +32,7 @@ Use them in this order:
 Run:
 
 ```bash
-chmod +x scripts/kali/workspace/Initialize-DirectoryLayout.sh
-./scripts/kali/workspace/Initialize-DirectoryLayout.sh
+bash scripts/kali/workspace/Initialize-DirectoryLayout.sh
 ```
 
 The helper creates:
@@ -60,8 +59,7 @@ Running the helper again is safe. Existing directories are preserved.
 Run:
 
 ```bash
-chmod +x scripts/kali/workspace/New-CTFWorkspace.sh
-./scripts/kali/workspace/New-CTFWorkspace.sh "Example CTF"
+bash scripts/kali/workspace/New-CTFWorkspace.sh "Example CTF"
 ```
 
 The supplied name is converted into a filesystem-safe directory name.
@@ -162,8 +160,7 @@ Existing notes and challenge artifacts remain untouched.
 Run:
 
 ```bash
-chmod +x scripts/kali/workspace/New-DFIRCaseWorkspace.sh
-./scripts/kali/workspace/New-DFIRCaseWorkspace.sh "Example DFIR Lab"
+bash scripts/kali/workspace/New-DFIRCaseWorkspace.sh "Example DFIR Lab"
 ```
 
 The name is converted into a filesystem-safe directory name.

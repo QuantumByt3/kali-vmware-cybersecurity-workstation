@@ -14,13 +14,7 @@ Kali's system Python or overwriting an existing Git identity.
 From the root of this repository inside Kali, run:
 
 ```bash
-chmod +x scripts/kali/Configure-DevelopmentEnvironment.sh
-```
-
-Then run:
-
-```bash
-./scripts/kali/Configure-DevelopmentEnvironment.sh
+bash scripts/kali/Configure-DevelopmentEnvironment.sh
 ```
 
 Enter your Kali password if `sudo` prompts for it.

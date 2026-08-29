@@ -209,9 +209,44 @@ This repository provides:
 scripts/kali/workspace/Initialize-DirectoryLayout.sh
 ```
 
-The script creates the workspace automatically.
+The script creates the standard workspace automatically.
 
-It does not delete or overwrite existing files.
+It creates only missing directories and leaves existing files and directories
+unchanged.
+
+Before running it, complete Step 00 Part B and confirm that the terminal is
+inside the Kali repository root.
+
+From the repository root inside Kali, run:
+
+```bash
+bash scripts/kali/workspace/Initialize-DirectoryLayout.sh
+```
+
+Do not run this script with `sudo`.
+
+The workspace belongs to the normal Kali user, and the script intentionally
+refuses to run as root.
+
+A successful run ends with:
+
+```text
+Overall Result: DIRECTORY LAYOUT VERIFIED
+```
+
+and returns exit code:
+
+```text
+0
+```
+
+If the script reports:
+
+```text
+Overall Result: DIRECTORY SETUP NEEDS ATTENTION
+```
+
+stop and review the reported failure before continuing.
 
 ---
 
@@ -230,4 +265,6 @@ Before continuing, verify:
 - [ ] `Tools` exists
 - [ ] `Temp` exists
 
-The next step will create and test the directory-setup script.
+After the directory layout is verified, continue to:
+
+[11 — Install and Verify Core Kali Tools](11-core-tools.md)
