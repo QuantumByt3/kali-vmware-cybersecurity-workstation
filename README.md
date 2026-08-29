@@ -300,6 +300,9 @@ The normal build sequence is:
 Windows 11
     |
     v
+Get the Repository on Windows
+    |
+    v
 Check Host Readiness
     |
     v
@@ -325,6 +328,9 @@ Create a Known-Good Snapshot
     |
     v
 Review the Kali Security Baseline
+    |
+    v
+Get or Verify the Repository inside Kali
     |
     v
 Create the Workspace Structure
@@ -356,6 +362,21 @@ Follow the documentation in order for the first build.
 ---
 
 # Build Guide
+
+## Step 00 — Get the Repository
+
+Before running any repository script, obtain and verify the repository files
+in the operating system where that script will run.
+
+[00 — Get the Repository Before Running Repository Scripts](docs/00-get-the-repository.md)
+
+For the first part of the build, this means obtaining the Windows repository
+copy before Step 1.
+
+Later, before Step 10 uses Kali-side repository scripts, obtain or verify a
+separate Kali repository copy as explained in Step 00.
+
+---
 
 ## Phase 1 — Prepare Windows and VMware
 
@@ -1279,9 +1300,16 @@ troubleshoot, validate, and safely use it.
 
 Begin with:
 
+[00 — Get the Repository Before Running Repository Scripts](docs/00-get-the-repository.md)
+
+After the repository is available on the Windows host, continue to:
+
 [01 — Windows 11 Host Readiness](docs/01-windows-host-readiness.md)
 
 Then continue through the numbered guides in order.
+
+Before Step 10, return to Step 00 Part B to obtain or verify the repository
+inside Kali before running Kali-side repository scripts.
 
 If the Windows host and VMware are already configured, still review the early
 guides before skipping them so that your VM settings match the repository

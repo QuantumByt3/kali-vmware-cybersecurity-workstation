@@ -9,6 +9,35 @@ remain responsive while Kali is running.
 
 ---
 
+## Before You Begin — Repository Required
+
+This guide uses a Windows PowerShell validator contained in this repository.
+
+Before continuing, obtain or verify the Windows repository copy by completing:
+
+[00 — Get the Repository Before Running Repository Scripts](00-get-the-repository.md)
+
+You do not need a GitHub account when cloning this public repository over HTTPS
+or when using GitHub's **Download ZIP** option.
+
+Before a command in this guide says:
+
+```text
+From the repository root in PowerShell
+```
+
+confirm that PowerShell is inside the local repository directory containing:
+
+```text
+README.md
+docs
+scripts
+```
+
+Do not continue with a repository-script command until the referenced script
+exists locally.
+
+---
 ## 1. What This Guide Checks
 
 Before installing VMware Workstation Pro, verify:
