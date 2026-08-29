@@ -14,13 +14,7 @@ available in Kali.
 From the root of this repository inside Kali, run:
 
 ```bash
-chmod +x scripts/kali/profiles/Install-WebTools.sh
-```
-
-Then run:
-
-```bash
-./scripts/kali/profiles/Install-WebTools.sh
+bash scripts/kali/profiles/Install-WebTools.sh
 ```
 
 Enter your Kali password if `sudo` prompts for it.

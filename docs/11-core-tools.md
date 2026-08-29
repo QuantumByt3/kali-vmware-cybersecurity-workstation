@@ -14,13 +14,7 @@ It does not add third-party repositories or remove existing packages.
 From the root of this repository inside Kali, run:
 
 ```bash
-chmod +x scripts/kali/Install-CoreTools.sh
-```
-
-Then run:
-
-```bash
-./scripts/kali/Install-CoreTools.sh
+bash scripts/kali/Install-CoreTools.sh
 ```
 
 Enter your Kali password if `sudo` prompts for it.

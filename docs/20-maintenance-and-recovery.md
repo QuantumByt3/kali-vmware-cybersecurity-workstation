@@ -70,7 +70,7 @@ A useful name should explain why the snapshot exists.
 Use:
 
 ```bash
-./scripts/kali/Update-Kali.sh
+bash scripts/kali/Update-Kali.sh
 ```
 
 The helper checks the system, refreshes APT metadata, reports available
@@ -105,7 +105,7 @@ After startup, allow networking and the desktop to settle before validation.
 Run:
 
 ```bash
-./scripts/kali/Test-KaliReadiness.sh
+bash scripts/kali/Test-KaliReadiness.sh
 ```
 
 A healthy result ends with:
@@ -131,31 +131,31 @@ If an update changes or removes a tool, run only the relevant profile.
 Core tools:
 
 ```bash
-./scripts/kali/Install-CoreTools.sh
+bash scripts/kali/Install-CoreTools.sh
 ```
 
 CTF tools:
 
 ```bash
-./scripts/kali/profiles/Install-CTFTools.sh
+bash scripts/kali/profiles/Install-CTFTools.sh
 ```
 
 Web tools:
 
 ```bash
-./scripts/kali/profiles/Install-WebTools.sh
+bash scripts/kali/profiles/Install-WebTools.sh
 ```
 
 Network and AD tools:
 
 ```bash
-./scripts/kali/profiles/Install-NetworkADTools.sh
+bash scripts/kali/profiles/Install-NetworkADTools.sh
 ```
 
 Blue-Team and DFIR tools:
 
 ```bash
-./scripts/kali/profiles/Install-BlueTeamDFIRTools.sh
+bash scripts/kali/profiles/Install-BlueTeamDFIRTools.sh
 ```
 
 ---
@@ -165,7 +165,7 @@ Blue-Team and DFIR tools:
 Run:
 
 ```bash
-./scripts/kali/Configure-DevelopmentEnvironment.sh
+bash scripts/kali/Configure-DevelopmentEnvironment.sh
 ```
 
 when development tooling needs verification.
@@ -192,7 +192,7 @@ sudo pip install
 Inside Kali:
 
 ```bash
-./scripts/kali/Test-KaliNetworkReadiness.sh
+bash scripts/kali/Test-KaliNetworkReadiness.sh
 ```
 
 On Windows:
@@ -211,7 +211,7 @@ values in their normal output.
 Periodically run:
 
 ```bash
-./scripts/kali/Harden-Kali.sh
+bash scripts/kali/Harden-Kali.sh
 ```
 
 This audit-oriented helper reviews:
@@ -338,7 +338,7 @@ Avoid random configuration changes.
 Start with:
 
 ```bash
-./scripts/kali/Test-KaliNetworkReadiness.sh
+bash scripts/kali/Test-KaliNetworkReadiness.sh
 ```
 
 Then check Windows:

@@ -13,13 +13,7 @@ memory forensics, and authorized blue-team or incident-response training.
 From the root of this repository inside Kali, run:
 
 ```bash
-chmod +x scripts/kali/profiles/Install-BlueTeamDFIRTools.sh
-```
-
-Then run:
-
-```bash
-./scripts/kali/profiles/Install-BlueTeamDFIRTools.sh
+bash scripts/kali/profiles/Install-BlueTeamDFIRTools.sh
 ```
 
 Enter your Kali password if `sudo` prompts for it.

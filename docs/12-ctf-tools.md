@@ -12,13 +12,7 @@ The profile is intentionally smaller than Kali's broad metapackages.
 From the root of this repository inside Kali, run:
 
 ```bash
-chmod +x scripts/kali/profiles/Install-CTFTools.sh
-```
-
-Then run:
-
-```bash
-./scripts/kali/profiles/Install-CTFTools.sh
+bash scripts/kali/profiles/Install-CTFTools.sh
 ```
 
 Enter your Kali password if `sudo` prompts for it.
