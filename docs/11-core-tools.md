@@ -17,6 +17,11 @@ From the root of this repository inside Kali, run:
 bash scripts/kali/Install-CoreTools.sh
 ```
 
+Run the script from the normal Kali account. Do not prefix the command with
+`sudo` and do not run it from a root shell. The script deliberately refuses a
+root execution context and requests `sudo` only for the administrative package
+operations it performs.
+
 Enter your Kali password if `sudo` prompts for it.
 
 The script will first run:
@@ -98,6 +103,22 @@ n
 
 The script will not install the missing packages unless you approve the
 installation.
+
+Because these packages are required by the core workstation baseline,
+cancelling the installation is treated as an incomplete setup. The script
+reports:
+
+```text
+Overall Result: CORE TOOL SETUP NEEDS ATTENTION
+```
+
+and returns exit code:
+
+```text
+1
+```
+
+Run the script again and approve installation before continuing.
 
 ---
 
@@ -214,5 +235,12 @@ Before continuing, verify:
 - [ ] The script finished with `FAIL : 0`
 - [ ] The script returned exit code `0`
 
-The next phase adds focused cybersecurity tool profiles without installing
-every Kali package available.
+The core Kali tool baseline is now verified.
+
+Previous:
+
+[10 — Directory Organization](10-directory-organization.md)
+
+Continue to:
+
+[12 — CTF Tools](12-ctf-tools.md)

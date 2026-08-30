@@ -15,6 +15,10 @@ From the root of this repository inside Kali, run:
 bash scripts/kali/profiles/Install-CTFTools.sh
 ```
 
+Run the script from the normal Kali account. Do not prefix the command with
+`sudo` and do not run it from a root shell. The profile requests `sudo` only
+for package-management operations.
+
 Enter your Kali password if `sudo` prompts for it.
 
 The script refreshes package information and checks which CTF packages are
@@ -159,6 +163,16 @@ and press **Enter** to install them from the configured Kali repositories.
 
 The script does not add third-party APT repositories.
 
+If required CTF packages are missing and you decline the installation prompt,
+the profile remains incomplete. The script reports:
+
+```text
+Overall Result: CTF TOOL PROFILE NEEDS ATTENTION
+```
+
+and returns exit code `1`. Run the profile again and approve installation
+before continuing.
+
 ---
 
 ## 9. Kali Metapackages
@@ -217,5 +231,12 @@ Before continuing, verify:
 - [ ] The script returns exit code `0`
 - [ ] Running the script a second time does not reinstall existing packages
 
-The next phase will establish a focused web-security workflow and browser
-tooling for authorized application-security labs.
+The focused CTF tool profile is now verified.
+
+Previous:
+
+[11 — Install and Verify Core Kali Tools](11-core-tools.md)
+
+Continue to:
+
+[13 — Web Security Tools](13-web-security-tools.md)

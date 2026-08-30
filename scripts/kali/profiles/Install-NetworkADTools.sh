@@ -198,7 +198,7 @@ else
         y|Y|yes|YES|Yes)
             ;;
         *)
-            write_result WARN "Package installation" "Installation was cancelled by the user"
+            write_result FAIL "Package installation" "Installation was cancelled; required networking/AD packages remain missing"
             finish
             ;;
     esac

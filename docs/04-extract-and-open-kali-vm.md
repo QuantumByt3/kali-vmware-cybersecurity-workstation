@@ -287,6 +287,38 @@ depending on the VMware interface.
 
 The next guide walks through the settings before first boot.
 
+### Understand the Kali VM's Legacy Hardware Compatibility Profile
+
+Kali's official VMware build documentation states that its pre-built VMware
+images are generated with the **Workstation 8.x** virtual-machine hardware
+compatibility profile so that the images work for a wider range of VMware
+users.
+
+That label describes the **virtual hardware compatibility level of the VM**.
+It does **not** mean that VMware Workstation 8 is installed on the Windows
+host.
+
+Kali also notes that a newer VMware Workstation release may offer to upgrade
+the VM from that older compatibility profile. Broadcom documents newer virtual
+hardware generations for current Workstation releases.
+
+Review:
+
+[Kali inside VMware (Guest VM)](https://www.kali.org/docs/virtualization/install-vmware-guest-vm/)
+
+and:
+
+[VMware Virtual Machine Hardware Versions](https://knowledge.broadcom.com/external/article/315655/virtual-machine-hardware-versions.html)
+
+For this repository, keep the Kali VM powered off and complete the virtual
+hardware compatibility review in Step 05 before the first boot.
+
+This check is especially important on newer VMware Workstation releases because
+updating an older VM compatibility profile can resolve or prevent some
+guest-display and pointer-compatibility problems. Step 06 includes a specific
+troubleshooting path for the case where mouse movement or clicks work but the
+guest cursor itself is invisible.
+
 ---
 
 ## 12. What the Settings Window Should Show
@@ -426,14 +458,15 @@ Once Kali appears in the VMware library:
 
 1. Leave the VM powered off.
 2. Open the VM settings.
-3. Review Memory.
-4. Review Processors.
-5. Confirm the existing virtual disk.
-6. Confirm NAT networking for the normal baseline.
-7. Review host/guest integration settings.
-8. Review the remaining virtual hardware.
-9. Save the configuration.
-10. Power on Kali only after the configuration guide is complete.
+3. Review and, when appropriate, upgrade the VM's hardware compatibility.
+4. Review Memory.
+5. Review Processors.
+6. Confirm the existing virtual disk.
+7. Confirm NAT networking for the normal baseline.
+8. Review host/guest integration settings.
+9. Review the remaining virtual hardware.
+10. Save the configuration.
+11. Power on Kali only after the configuration guide is complete.
 
 Continue to:
 
@@ -457,12 +490,13 @@ Before continuing, verify:
 - [ ] `I Copied It` was selected if VMware displayed that prompt
 - [ ] The included virtual disk was preserved
 - [ ] The VM has not been powered on yet
-- [ ] The VMware settings window is ready for review
+- [ ] You understand that `Workstation 8.x` can describe the VM's compatibility profile, not the installed VMware version
+- [ ] The VMware settings window is ready for hardware-compatibility and configuration review
 
 Previous:
 
-[Download and Verify the Official Kali VMware Image](03-download-and-verify-kali.md)
+[03 — Download and Verify the Official Kali VMware Image](03-download-and-verify-kali.md)
 
 Continue to:
 
-[Configure the Kali VMware Virtual Machine](05-configure-kali-vm.md)
+[05 — Configure the Kali VMware Virtual Machine](05-configure-kali-vm.md)

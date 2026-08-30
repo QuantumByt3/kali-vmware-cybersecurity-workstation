@@ -237,27 +237,35 @@ else
 fi
 
 # Read-only network readiness without printing addresses.
-ACTIVE_INTERFACE_COUNT="$(
-    ip -brief link show up |
-        awk '$1 != "lo" {count++} END {print count+0}'
-)"
+if command -v ip >/dev/null 2>&1; then
+    ACTIVE_INTERFACE_COUNT="$(
+        ip -brief link show up |
+            awk '$1 != "lo" {count++} END {print count+0}'
+    )"
 
-if [[ "$ACTIVE_INTERFACE_COUNT" =~ ^[0-9]+$ ]] && (( ACTIVE_INTERFACE_COUNT > 0 )); then
-    write_result PASS "Network interface" "At least one active non-loopback interface is present"
+    if [[ "$ACTIVE_INTERFACE_COUNT" =~ ^[0-9]+$ ]] && (( ACTIVE_INTERFACE_COUNT > 0 )); then
+        write_result PASS "Network interface" "At least one active non-loopback interface is present"
+    else
+        write_result FAIL "Network interface" "No active non-loopback interface was detected"
+    fi
+
+    if ip -4 route show default | grep -q '^default'; then
+        write_result PASS "Default route" "A default IPv4 route is present"
+    else
+        write_result WARN "Default route" "No default IPv4 route was detected"
+    fi
 else
-    write_result FAIL "Network interface" "No active non-loopback interface was detected"
+    write_result FAIL "Network checks" "ip command is unavailable; interface and route checks could not be completed"
 fi
 
-if ip -4 route show default | grep -q '^default'; then
-    write_result PASS "Default route" "A default IPv4 route is present"
+if command -v getent >/dev/null 2>&1; then
+    if getent hosts kali.org >/dev/null 2>&1; then
+        write_result PASS "DNS resolution" "Hostname resolution is working"
+    else
+        write_result WARN "DNS resolution" "Hostname resolution failed"
+    fi
 else
-    write_result WARN "Default route" "No default IPv4 route was detected"
-fi
-
-if getent hosts kali.org >/dev/null 2>&1; then
-    write_result PASS "DNS resolution" "Hostname resolution is working"
-else
-    write_result WARN "DNS resolution" "Hostname resolution failed"
+    write_result FAIL "DNS resolution" "getent is unavailable; hostname resolution could not be evaluated"
 fi
 
 # Review common remote services without starting or stopping anything.

@@ -265,6 +265,12 @@ Before continuing, verify:
 - [ ] `Tools` exists
 - [ ] `Temp` exists
 
-After the directory layout is verified, continue to:
+The standard Kali workspace directory layout is now verified.
+
+Previous:
+
+[09 — Kali Security Baseline](09-kali-security-baseline.md)
+
+Continue to:
 
 [11 — Install and Verify Core Kali Tools](11-core-tools.md)

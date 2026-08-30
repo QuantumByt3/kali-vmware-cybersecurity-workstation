@@ -248,8 +248,64 @@ From the repository root in PowerShell, run:
 .\scripts\windows\Test-VMwareInstallation.ps1
 ```
 
-The validator checks the installed VMware application and related Windows
-components without creating or modifying a virtual machine.
+The validator is read-only and non-interactive. It does not install, update,
+repair, launch, or modify VMware, and it does not create or change a virtual
+machine.
+
+It checks:
+
+- `vmware.exe` in the normal Program Files locations and, when available, from
+  the current command search path.
+- VMware product and version information from the installed executable.
+- The installed `vmware.exe` Authenticode signature.
+- The `VMAuthdService` VMware Authorization Service.
+- Windows network adapters whose interface description identifies VMware.
+- Whether Windows reports an active hypervisor.
+
+The result states are:
+
+```text
+Overall Result: VMWARE INSTALLATION VERIFIED
+```
+
+when no warnings or failures are recorded, or:
+
+```text
+Overall Result: VMWARE INSTALLED WITH REVIEW ITEMS
+```
+
+when one or more warnings are present but no blocking failure is recorded.
+
+Both of those states return process exit code:
+
+```text
+0
+```
+
+If a blocking check fails, such as VMware not being found or the installed
+VMware executable having a non-valid digital-signature status, the script ends
+with:
+
+```text
+Overall Result: VMWARE INSTALLATION NEEDS ATTENTION
+```
+
+and returns process exit code:
+
+```text
+1
+```
+
+The script does not print an `Exit code:` line automatically. To inspect the
+process exit code immediately afterward, run:
+
+```powershell
+$LASTEXITCODE
+```
+
+An authorization service that exists but is not currently running is reported
+as informational rather than as a failure. A missing authorization service or
+missing VMware virtual network adapters is reported as a warning.
 
 Review any warning or failure before continuing.
 
@@ -285,6 +341,10 @@ Before continuing, verify:
 - [ ] You have not created a second unnecessary Kali VM with the New Virtual Machine Wizard
 - [ ] `Test-VMwareInstallation.ps1` completes successfully
 
+Previous:
+
+[01 — Windows 11 Host Readiness](01-windows-host-readiness.md)
+
 Continue to:
 
-[Download and Verify the Official Kali VMware Image](03-download-and-verify-kali.md)
+[03 — Download and Verify the Official Kali VMware Image](03-download-and-verify-kali.md)

@@ -415,6 +415,14 @@ Review memory, processors, disk, NAT networking, shared folders, guest
 isolation, snapshots, VMware Tools, VNC, and other VM options before first
 boot.
 
+Kali's official pre-built VMware images may open with an older virtual-hardware
+compatibility profile such as `Workstation 8.x`. That label describes the VM's
+virtual hardware compatibility, not the version of VMware Workstation installed
+on Windows. With the VM fully powered off, Step 05 explains how to review and,
+when appropriate, upgrade that compatibility level before first boot. If mouse
+input works but the pointer is invisible, Step 06 provides the corresponding
+first-boot troubleshooting path.
+
 [05 — Configure the Kali VMware VM](docs/05-configure-kali-vm.md)
 
 ---
@@ -614,7 +622,8 @@ paths, unfinished content, and `.gitignore` regressions.
 .\scripts\windows\Test-RepositorySafety.ps1
 ```
 
-The repository-safety validator is read-only.
+The repository-safety validator is read-only and supports Windows PowerShell
+5.1 or newer PowerShell releases.
 
 It reports findings without printing detected secret values.
 
@@ -626,7 +635,13 @@ It reports findings without printing detected secret values.
 
 [View `Update-Kali.sh`](scripts/kali/Update-Kali.sh)
 
-Provides a controlled Kali update workflow.
+Provides a controlled Kali update workflow after the repository is available
+inside Kali. Run it from the normal Kali account, not from a root shell or with
+`sudo`; the helper requests `sudo` only for the administrative commands it
+needs. It validates basic routing, DNS, and the Kali rolling repository before
+refreshing package metadata and asking whether to perform the full upgrade.
+Declining the full upgrade reports `UPDATE CANCELLED` and returns exit code `2`
+so an incomplete maintenance run is not mistaken for a completed update.
 
 ```bash
 bash scripts/kali/Update-Kali.sh
@@ -637,7 +652,10 @@ bash scripts/kali/Update-Kali.sh
 [View `Harden-Kali.sh`](scripts/kali/Harden-Kali.sh)
 
 Audits the Kali baseline and reports findings without silently applying broad
-system-hardening changes.
+system-hardening changes. Run it from the normal Kali account. The audit uses
+`sudo` authorization for read-only privileged checks such as the root-account
+password state and listener review, but it does not stop services, change SSH
+settings, alter firewall rules, or modify VMware configuration.
 
 ```bash
 bash scripts/kali/Harden-Kali.sh
@@ -687,11 +705,17 @@ bash scripts/kali/Test-KaliReadiness.sh
 
 ---
 
-## Optional Kali Tool Profiles
+## Focused Kali Tool Profiles
 
-Not every user needs every security tool.
+The complete workstation build uses all four focused profiles in Steps 12
+through 16. Each installer runs from the normal Kali account, uses `sudo` only
+for package-management work, installs only missing required packages, and
+returns a failure if required packages are declined or remain unavailable.
 
-Install the profiles that match your authorized training or work.
+A user intentionally building a narrower workstation may choose not to install
+every profile, but the final `Test-KaliReadiness.sh` validator treats the full
+documented tool baseline as required and will report missing profile commands
+as failures.
 
 ### CTF Profile
 
@@ -981,6 +1005,11 @@ bash scripts/kali/Test-KaliReadiness.sh
 
 Review warnings instead of automatically treating them as failures.
 
+The readiness validators return exit code `0` for a verified state or a
+review-item state and exit code `1` when blocking failures are present. The
+maintenance updater uses exit code `2` specifically when the user cancels the
+full upgrade.
+
 Correct actual failures before calling the workstation or repository complete.
 
 ---
@@ -1058,8 +1087,8 @@ For repository-publication problems, begin with:
 
 # Repository Layout
 
-The repository is organized around documentation, host-side validation,
-Kali-side automation, and GitHub governance.
+The tree below represents the files and directories that are present in a fresh
+Git clone of this repository.
 
 ```text
 kali-vmware-cybersecurity-workstation/
@@ -1078,17 +1107,11 @@ kali-vmware-cybersecurity-workstation/
 |   `-- pull_request_template.md
 |
 |-- assets/
-|   |-- raw-screenshots/          # local-only; ignored
 |   `-- sanitized-images/
 |       `-- .gitkeep
 |
-|-- config/
-|   |-- git/
-|   |-- shell/
-|   |-- terminal/
-|   `-- tmux/
-|
 |-- docs/
+|   |-- 00-get-the-repository.md
 |   |-- 01-windows-host-readiness.md
 |   |-- 02-install-vmware-workstation.md
 |   |-- 03-download-and-verify-kali.md
@@ -1110,12 +1133,6 @@ kali-vmware-cybersecurity-workstation/
 |   |-- 19-vmware-networking.md
 |   `-- 20-maintenance-and-recovery.md
 |
-|-- examples/
-|   |-- bash/
-|   |-- git/
-|   |-- networking/
-|   `-- python/
-|
 |-- scripts/
 |   |-- windows/
 |   |   |-- Test-HostReadiness.ps1
@@ -1125,18 +1142,18 @@ kali-vmware-cybersecurity-workstation/
 |   |   `-- Test-VMwareNetworkReadiness.ps1
 |   |
 |   `-- kali/
-|       |-- Update-Kali.sh
+|       |-- Configure-DevelopmentEnvironment.sh
 |       |-- Harden-Kali.sh
 |       |-- Install-CoreTools.sh
-|       |-- Configure-DevelopmentEnvironment.sh
 |       |-- Test-KaliNetworkReadiness.sh
 |       |-- Test-KaliReadiness.sh
+|       |-- Update-Kali.sh
 |       |
 |       |-- profiles/
+|       |   |-- Install-BlueTeamDFIRTools.sh
 |       |   |-- Install-CTFTools.sh
-|       |   |-- Install-WebTools.sh
 |       |   |-- Install-NetworkADTools.sh
-|       |   `-- Install-BlueTeamDFIRTools.sh
+|       |   `-- Install-WebTools.sh
 |       |
 |       `-- workspace/
 |           |-- Initialize-DirectoryLayout.sh
@@ -1155,12 +1172,13 @@ kali-vmware-cybersecurity-workstation/
 `-- THIRD_PARTY_NOTICES.md
 ```
 
-Some directories are intentionally available for future repository content but
-may remain empty.
+The repository may also use local-only working directories that are intentionally
+excluded from Git. For example, `assets/raw-screenshots/` is reserved for
+unsanitized screenshots that must never be published directly.
 
-Git does not track an empty directory by itself.
-
-Local-only directories remain excluded by `.gitignore`.
+Because Git does not track empty directories, a directory that exists only on a
+developer's local workstation is not part of the fresh-clone repository unless
+it contains at least one tracked file.
 
 ---
 

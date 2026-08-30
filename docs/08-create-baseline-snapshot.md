@@ -141,4 +141,12 @@ Before continuing, verify:
 - [ ] The normal user account can sign in
 - [ ] The terminal opens successfully
 
-The next step will establish the Kali workstation security baseline.
+The clean updated baseline snapshot is now established.
+
+Previous:
+
+[07 — Update Kali Linux](07-update-kali.md)
+
+Continue to:
+
+[09 — Kali Workstation Security Baseline](09-kali-security-baseline.md)

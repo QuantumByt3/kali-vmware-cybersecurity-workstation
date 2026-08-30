@@ -16,10 +16,19 @@ From the root of this repository inside Kali, run:
 bash scripts/kali/profiles/Install-NetworkADTools.sh
 ```
 
+Run the script from the normal Kali account. Do not prefix the command with
+`sudo` and do not run it from a root shell. The profile requests `sudo` only
+for package-management operations.
+
 Enter your Kali password if `sudo` prompts for it.
 
 The script refreshes package information and installs only packages that are
 missing.
+
+If required networking or Active Directory packages are missing and you
+decline the installation prompt, the profile remains incomplete. The script
+reports `Overall Result: NETWORK/AD TOOL PROFILE NEEDS ATTENTION` and returns
+exit code `1`.
 
 ---
 
@@ -245,5 +254,12 @@ Before continuing, verify:
 - [ ] The script completed with `FAIL : 0`
 - [ ] The script returned exit code `0`
 
-The next phase will inventory blue-team and DFIR tooling before creating the
-defensive-security profile.
+The focused networking and Active Directory tool profile is now verified.
+
+Previous:
+
+[14 — Browser and Proxy Workflow](14-browser-proxy-workflow.md)
+
+Continue to:
+
+[16 — Blue-Team and DFIR Tools](16-blue-team-dfir-tools.md)

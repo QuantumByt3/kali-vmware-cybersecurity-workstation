@@ -17,9 +17,18 @@ From the root of this repository inside Kali, run:
 bash scripts/kali/Configure-DevelopmentEnvironment.sh
 ```
 
+Run the script from the normal Kali account. Do not prefix the command with
+`sudo` and do not run it from a root shell. The script requests `sudo` only for
+package-management operations.
+
 Enter your Kali password if `sudo` prompts for it.
 
-The script checks the workstation first and installs only missing packages.
+The script checks the workstation first and installs only missing development
+packages. It also verifies `curl`, `wget`, `jq`, and `tree`, which are expected
+to be present from the earlier core-tool baseline.
+
+If required development packages are missing and you decline installation, the
+configuration remains incomplete and the script returns exit code `1`.
 
 ---
 
@@ -320,23 +329,41 @@ For this workstation:
 
 ## 13. Successful Result
 
-A successful configuration run ends with:
+A configuration with no warnings ends with:
 
 ```text
 Overall Result: DEVELOPMENT ENVIRONMENT VERIFIED
 ```
 
-Check the exit code with:
+If the required development environment is functional but the global Git name
+or email is not configured, the script can instead end with:
+
+```text
+Overall Result: DEVELOPMENT ENVIRONMENT READY WITH REVIEW ITEMS
+```
+
+Both states return exit code:
+
+```text
+0
+```
+
+Check the exit code immediately afterward with:
 
 ```bash
 echo $?
 ```
 
-Expected result:
+A blocking failure, including declining required missing development packages,
+returns exit code `1` and reports:
 
 ```text
-0
+Overall Result: DEVELOPMENT ENVIRONMENT NEEDS ATTENTION
 ```
+
+The script sets `init.defaultBranch` to `main` only when that setting was
+previously unset. If you already use another default branch, the existing value
+is preserved and reported as informational.
 
 Running the script a second time should recognize the existing configuration
 and avoid reinstalling packages unnecessarily.
@@ -353,7 +380,8 @@ Before continuing, verify:
 - [ ] pipx is available
 - [ ] Git is available
 - [ ] Existing Git identity values are preserved
-- [ ] New Git repositories default to `main`
+- [ ] A missing global Git name or email is reviewed and configured if commits are planned
+- [ ] `init.defaultBranch` is `main` when previously unset, or an existing custom value remains preserved
 - [ ] Zsh is available
 - [ ] Bash is available
 - [ ] tmux is available
@@ -366,5 +394,12 @@ Before continuing, verify:
 - [ ] The script returned exit code `0`
 - [ ] A second run completes without reinstalling existing packages
 
-The next phase will build reusable workspace helpers for CTF and forensic
-projects.
+The Kali development environment is now verified.
+
+Previous:
+
+[16 — Blue-Team and DFIR Tools](16-blue-team-dfir-tools.md)
+
+Continue to:
+
+[18 — Workspace Helpers](18-workspace-helpers.md)

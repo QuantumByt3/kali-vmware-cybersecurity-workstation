@@ -27,6 +27,74 @@ Wait for Kali Linux to reach the login screen.
 
 The first boot may take longer than later boots.
 
+### If the Mouse Works but the Cursor Is Invisible
+
+An **invisible cursor** is different from a complete mouse-input failure.
+
+This troubleshooting path applies when the pointer itself cannot be seen, but
+mouse movement, hover behavior, or clicks still appear to work inside Kali.
+
+Kali's official VMware build documentation states that its pre-built VMware
+images are generated with the older **Workstation 8.x** virtual-machine
+hardware compatibility profile for broad backward compatibility. On newer
+VMware Workstation releases, that legacy profile can contribute to unexpected
+guest behavior.
+
+Broadcom employees have specifically recommended upgrading the VM's virtual
+hardware for invisible-cursor reports, including a Windows 11 host running Kali
+Linux in VMware Workstation 25H2.
+
+Review:
+
+[Kali inside VMware (Guest VM)](https://www.kali.org/docs/virtualization/install-vmware-guest-vm/)
+
+[VMware Virtual Machine Hardware Versions](https://knowledge.broadcom.com/external/article/315655/virtual-machine-hardware-versions.html)
+
+[VMware 25H2 — Kali Cursor Discussion](https://community.broadcom.com/vmware-cloud-foundation/discussion/vmware-25h2)
+
+If the cursor is invisible:
+
+1. Do not reinstall Kali.
+2. Do not begin changing Kali cursor themes or guest packages.
+3. Shut Kali down cleanly if possible.
+4. Confirm that the VM is fully powered off, not suspended.
+5. In VMware Workstation Pro, select:
+
+   ```text
+   VM
+   -> Manage
+   -> Change Hardware Compatibility
+   ```
+
+6. Confirm that Step 05 upgraded the VM from the legacy compatibility profile
+   to the newest compatibility level supported by the installed VMware
+   Workstation release.
+7. If the compatibility level was not upgraded, complete the Step 05
+   compatibility procedure, then power Kali on again.
+8. Recheck whether the cursor is visible.
+
+Return to:
+
+[05 — Configure the Kali VMware Virtual Machine](05-configure-kali-vm.md)
+
+if the hardware-compatibility procedure was skipped or not completed.
+
+If the VM is already using the intended current compatibility level and the
+cursor is still invisible, do not make several unrelated graphics changes at
+once. Record the VMware Workstation version and VM hardware compatibility level,
+then continue troubleshooting one change at a time using current Broadcom
+guidance.
+
+Broadcom has documented additional host-side cursor-rendering troubleshooting
+for persistent cases, but those changes are not part of this repository's
+normal baseline.
+
+If the mouse does **not** move, click, or interact with the guest at all, treat
+that as a separate input problem rather than applying this invisible-cursor
+procedure automatically.
+
+---
+
 ---
 
 ## 2. Sign In with the Initial Kali Credentials
@@ -183,9 +251,11 @@ kali
 
 as its hostname.
 
-A later workstation-setup step can customize the hostname if desired.
+This repository does not require a custom hostname. If you choose to rename
+the VM later, make that change deliberately after the baseline is stable and
+record the new hostname in your private workstation notes.
 
-Do not change it yet.
+Do not change it during this first-boot step.
 
 ---
 
@@ -214,7 +284,8 @@ web servers
 database servers
 ```
 
-A later section will enable services only when they are actually needed.
+Enable a remote service only when an authorized lab or workflow explicitly
+requires it, and stop or disable it again when the task is complete.
 
 Keeping unnecessary services stopped reduces accidental network exposure.
 
@@ -225,6 +296,7 @@ Keeping unnecessary services stopped reduces accidental network exposure.
 Before continuing, verify:
 
 - [ ] Kali powered on successfully
+- [ ] The cursor is visible, or the invisible-cursor compatibility procedure was completed
 - [ ] The initial `kali` account logged in successfully
 - [ ] The default `kali` password was replaced
 - [ ] `whoami` reports `kali`
@@ -233,5 +305,12 @@ Before continuing, verify:
 - [ ] The current hostname was identified
 - [ ] No unnecessary remote services were manually enabled
 
-The next step will update Kali Linux and establish the initial software
-baseline.
+The first controlled boot and account-security checks are now complete.
+
+Previous:
+
+[05 — Configure the Kali VMware Virtual Machine](05-configure-kali-vm.md)
+
+Continue to:
+
+[07 — Update Kali Linux](07-update-kali.md)
