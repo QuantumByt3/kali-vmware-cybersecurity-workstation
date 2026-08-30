@@ -6,6 +6,12 @@ machine without disabling normal CTF, lab, or blue-team functionality.
 Kali is a security-testing workstation, not a production server. The goal is
 to reduce unnecessary exposure while keeping the tools you need usable.
 
+This initial baseline review is performed manually because the Kali repository
+copy is obtained after this step. Once Step 00 Part B has been completed,
+`scripts/kali/Harden-Kali.sh` provides a repeatable read-only audit for later
+maintenance. That helper requires working `sudo` authorization for its
+privileged read-only checks.
+
 ---
 
 ## 1. Use the Normal Kali Account
@@ -239,8 +245,16 @@ Before continuing, verify:
 - [ ] Copy-and-paste is disabled unless required
 - [ ] Credentials and VPN profiles are treated as sensitive data
 
-Before Step 10 uses Kali-side repository scripts, return to Step 00 Part B
-and obtain or verify the repository inside Kali.
+The Kali security baseline is now established.
+
+Previous:
+
+[08 — Create the Baseline Snapshot](08-create-baseline-snapshot.md)
+
+Before Step 10 uses Kali-side repository scripts, return to Step 00 Part B and
+obtain or verify the repository inside Kali:
+
+[00 — Get the Repository Before Running Repository Scripts](00-get-the-repository.md)
 
 Then continue to:
 

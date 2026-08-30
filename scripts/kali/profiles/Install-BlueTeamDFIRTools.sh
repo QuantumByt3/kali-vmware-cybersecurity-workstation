@@ -194,7 +194,7 @@ else
         y|Y|yes|YES|Yes)
             ;;
         *)
-            write_result WARN "APT package installation" "Installation was cancelled by the user"
+            write_result FAIL "APT package installation" "Installation was cancelled; required blue-team/DFIR packages remain missing"
             finish
             ;;
     esac
@@ -236,7 +236,7 @@ if [[ "$VOLATILITY_PIPX_INSTALLED" == "false" ]]; then
             fi
             ;;
         *)
-            write_result WARN "Volatility 3 installation" "Volatility 3 installation was cancelled by the user"
+            write_result FAIL "Volatility 3 installation" "Installation was cancelled; Volatility 3 remains unavailable"
             ;;
     esac
 fi
@@ -254,7 +254,7 @@ done
 if command_path="$(command -v vol 2>/dev/null)"; then
     write_result PASS "vol" "Volatility 3 command is available at $command_path"
 else
-    write_result WARN "vol" "Volatility 3 command is not available"
+    write_result FAIL "vol" "Volatility 3 command is not available"
 fi
 
 write_result INFO "Evidence handling" "Work on copies of evidence and preserve original hashes when performing forensic analysis"

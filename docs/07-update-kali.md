@@ -7,6 +7,11 @@ Kali is a rolling-release distribution. Keep it current, but avoid major
 updates immediately before an important CTF or lab if the system is already
 working and tested.
 
+At this point in the build, the repository has not yet been obtained inside
+Kali. Perform this first update manually as documented below. After Step 09
+returns you to Step 00 Part B and the repository exists inside Kali, later
+maintenance can use `scripts/kali/Update-Kali.sh`.
+
 ---
 
 ## 1. Confirm the Network Adapter Has an Address
@@ -194,6 +199,12 @@ Before continuing, verify:
 - [ ] Kali starts normally after the update
 - [ ] Release and kernel information can be displayed
 
-After Kali is updated and verified, continue to:
+The Kali operating system is now updated and verified.
+
+Previous:
+
+[06 — First Boot and Account Security](06-first-boot-and-account-security.md)
+
+Continue to:
 
 [08 — Create the Baseline Snapshot](08-create-baseline-snapshot.md)

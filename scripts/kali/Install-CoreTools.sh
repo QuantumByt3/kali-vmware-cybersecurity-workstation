@@ -159,7 +159,7 @@ for package in "${PACKAGES[@]}"; do
 
     candidate="$(
         apt-cache policy "$package" 2>/dev/null |
-            awk '/Candidate:/ {print $2; exit}'
+            awk '/Candidate:/ {candidate=$2} END {print candidate}'
     )"
 
     if [[ -z "$candidate" || "$candidate" == "(none)" ]]; then
@@ -190,7 +190,7 @@ else
         y|Y|yes|YES|Yes)
             ;;
         *)
-            write_result WARN "Package installation" "Installation was cancelled by the user"
+            write_result FAIL "Package installation" "Installation was cancelled; required core packages remain missing"
             finish
             ;;
     esac

@@ -60,7 +60,125 @@ this repository is published.
 
 ---
 
-## 3. Recommended Resource Profiles
+## 3. Review and Upgrade Virtual Hardware Compatibility
+
+Before changing memory, CPU, networking, or integration settings, review the
+VM's **virtual hardware compatibility** while the VM is fully powered off.
+
+Kali's official VMware build documentation states that its pre-built VMware
+images are intentionally generated with:
+
+```text
+Workstation 8.x
+```
+
+hardware compatibility so that the same image can run for a wider range of
+VMware users.
+
+This label describes the VM's **virtual hardware compatibility level**. It does
+**not** mean that VMware Workstation 8 is installed on the Windows host.
+
+Kali also states that newer VMware Workstation releases may offer to upgrade
+the VM from that older profile, removing limitations associated with the
+legacy compatibility level.
+
+Broadcom's current virtual-hardware table maps common Workstation releases as
+follows:
+
+| VMware Workstation release | Virtual hardware version |
+| --- | ---: |
+| Workstation 8.x | 8 |
+| Workstation Pro 17.x | 20 |
+| Workstation Pro 17.6 | 21 |
+| Workstation Pro 25H2 / 26H1 | 22 |
+
+Review the current Broadcom mapping before relying on a historical version
+number:
+
+[VMware Virtual Machine Hardware Versions](https://knowledge.broadcom.com/external/article/315655/virtual-machine-hardware-versions.html)
+
+### Repository Compatibility Baseline
+
+This repository prioritizes a current Windows 11 + supported VMware Workstation
+environment over preserving compatibility with very old VMware releases.
+
+When using a current supported Workstation release, upgrade the Kali VM from
+the legacy Workstation 8.x profile to the **newest compatibility level offered
+by the Workstation version installed on the host**.
+
+Do not choose a compatibility level newer than the installed VMware Workstation
+release supports.
+
+If you intentionally need to move this VM back to an older VMware product,
+review Broadcom's compatibility table before upgrading because a VM using a
+newer virtual hardware version may not power on in an older VMware release.
+
+### Change the Hardware Compatibility
+
+Keep the verified Kali `.7z` archive until the VM has completed its first
+successful boot and the repository reaches the known-good snapshot stage. That
+archive provides a clean re-extraction path if the initial VM configuration
+must be rebuilt.
+
+With the Kali VM fully powered off:
+
+1. Select the Kali VM in VMware Workstation Pro.
+2. Open:
+
+   ```text
+   VM
+   -> Manage
+   -> Change Hardware Compatibility
+   ```
+
+3. In the **Change Hardware Compatibility Wizard**, select **Next**.
+4. Choose the newest Workstation compatibility level supported by the
+   Workstation release installed on the Windows host.
+5. Select **Next**.
+6. If VMware asks whether to clone or alter the VM, choose:
+
+   ```text
+   Alter this virtual machine
+   ```
+
+   for this fresh, verified Kali image.
+
+7. Review the proposed compatibility change.
+8. Select **Finish**.
+9. Close the wizard when the conversion completes.
+10. Reopen the VM settings or summary and confirm that the VM is no longer
+    using the legacy Workstation 8.x compatibility profile.
+
+The exact wording of the compatibility label can vary between Workstation
+releases. Follow the newest compatibility level actually offered by the
+installed application.
+
+Broadcom documents the Workstation workflow under:
+
+[Virtual Machine Hardware Versions](https://knowledge.broadcom.com/external/article/315655/virtual-machine-hardware-versions.html)
+
+### Why This Repository Performs the Upgrade
+
+A lower virtual hardware version can limit newer virtual-machine functionality
+or contribute to unexpected guest behavior on a newer VMware product.
+Broadcom specifically lists unexpected guest-operating-system behavior and
+unavailable VM operations among symptoms associated with older hardware
+versions.
+
+For this Kali workstation, modernizing the compatibility profile before the
+first controlled boot also gives us a clean troubleshooting baseline for
+display and pointer problems.
+
+If the mouse later moves or clicks correctly but the pointer itself is
+invisible inside Kali, Step 06 treats that as an **invisible-cursor symptom**
+rather than a total mouse-input failure and directs you to verify this hardware
+compatibility change first.
+
+Do not change unrelated `.vmx` values manually as part of this procedure.
+
+---
+
+## 4. Recommended Resource Profiles
 
 Do not move every VMware slider as high as possible.
 
@@ -93,7 +211,7 @@ need.
 
 ---
 
-## 4. Memory
+## 5. Memory
 
 In the **Hardware** list, select:
 
@@ -178,7 +296,7 @@ Increase it only when a specific workload demonstrates a need.
 
 ---
 
-## 5. Why More RAM Is Not Always Better
+## 6. Why More RAM Is Not Always Better
 
 VMware must obtain the guest's memory from the Windows host.
 
@@ -199,7 +317,7 @@ starves Windows.
 
 ---
 
-## 6. Processors
+## 7. Processors
 
 In the **Hardware** list, select:
 
@@ -231,7 +349,7 @@ requires something else.
 
 ---
 
-## 7. Processor Recommendations
+## 8. Processor Recommendations
 
 Use these starting points.
 
@@ -284,7 +402,7 @@ configured intentionally.
 
 ---
 
-## 8. Why We Do Not Allocate Every CPU Thread
+## 9. Why We Do Not Allocate Every CPU Thread
 
 Windows, VMware, antivirus software, browsers, communication applications, and
 other host processes still need CPU time.
@@ -301,7 +419,7 @@ allocation.
 
 ---
 
-## 9. Kali's Official CPU Example
+## 10. Kali's Official CPU Example
 
 Kali's manual VMware build documentation currently demonstrates:
 
@@ -329,7 +447,7 @@ oversizing the VM.
 
 ---
 
-## 10. Processor Virtualization Options
+## 11. Processor Virtualization Options
 
 VMware may show advanced processor options such as:
 
@@ -352,7 +470,7 @@ Change these settings only for a documented requirement.
 
 ---
 
-## 11. Hard Disk
+## 12. Hard Disk
 
 Select the existing:
 
@@ -384,7 +502,7 @@ Do not create a replacement disk merely because VMware allows you to add one.
 
 ---
 
-## 12. Disk Space on the Windows Host
+## 13. Disk Space on the Windows Host
 
 The virtual disk can grow as Kali stores more data.
 
@@ -411,7 +529,7 @@ time.
 
 ---
 
-## 13. Network Adapter
+## 14. Network Adapter
 
 Select:
 
@@ -441,7 +559,7 @@ Use NAT for:
 
 ---
 
-## 14. Do Not Use Bridged Networking by Default
+## 15. Do Not Use Bridged Networking by Default
 
 Do not select:
 
@@ -469,7 +587,7 @@ The repository covers networking modes in detail here:
 
 ---
 
-## 15. Host-Only and LAN Segments
+## 16. Host-Only and LAN Segments
 
 Later, intentionally vulnerable local targets may use:
 
@@ -491,7 +609,7 @@ First establish a known-good working baseline.
 
 ---
 
-## 16. USB Controller
+## 17. USB Controller
 
 The pre-built VM may show:
 
@@ -512,7 +630,7 @@ to the VM.
 
 ---
 
-## 17. Sound Card
+## 18. Sound Card
 
 The pre-built VM may show:
 
@@ -528,7 +646,7 @@ pre-built setting alone avoids unnecessary configuration changes.
 
 ---
 
-## 18. Display
+## 19. Display
 
 The pre-built VM may show:
 
@@ -551,7 +669,7 @@ Establish the baseline first.
 
 ---
 
-## 19. Open the Options Tab
+## 20. Open the Options Tab
 
 After reviewing the **Hardware** tab, select:
 
@@ -579,7 +697,7 @@ The exact options vary by VMware version.
 
 ---
 
-## 20. General
+## 21. General
 
 Under:
 
@@ -608,7 +726,7 @@ This setting is VMware guest metadata; it is not the Kali release number.
 
 ---
 
-## 21. Virtual Machine Name
+## 22. Virtual Machine Name
 
 You may leave Kali's supplied name in place.
 
@@ -627,7 +745,7 @@ has been added to VMware.
 
 ---
 
-## 22. Working Directory
+## 23. Working Directory
 
 Confirm the working directory points to the VM storage location you selected.
 
@@ -650,7 +768,7 @@ machine itself.
 
 ---
 
-## 23. Shared Folders
+## 24. Shared Folders
 
 Select:
 
@@ -673,7 +791,7 @@ Keep them disabled until you have a specific file-transfer requirement.
 
 ---
 
-## 24. Guest Isolation
+## 25. Guest Isolation
 
 Select:
 
@@ -707,7 +825,7 @@ Return it to the baseline afterward.
 
 ---
 
-## 25. Snapshots
+## 26. Snapshots
 
 VMware snapshots are an important part of this workstation.
 
@@ -728,7 +846,7 @@ The snapshot workflow is documented here:
 
 ---
 
-## 26. AutoProtect
+## 27. AutoProtect
 
 If VMware provides:
 
@@ -751,7 +869,7 @@ Manual snapshots are easier for a beginner to understand and document.
 
 ---
 
-## 27. Encryption
+## 28. Encryption
 
 The pre-built VM may show:
 
@@ -769,7 +887,7 @@ storage, VM, and data levels according to the actual requirement.
 
 ---
 
-## 28. VMware Tools
+## 29. VMware Tools
 
 The official pre-built Kali VMware image includes guest tooling.
 
@@ -795,7 +913,7 @@ vmware-toolbox-cmd -v
 
 ---
 
-## 29. VNC Connections
+## 30. VNC Connections
 
 If the options include:
 
@@ -815,7 +933,7 @@ The beginner workstation does not need to expose a VNC service.
 
 ---
 
-## 30. Auto Login
+## 31. Auto Login
 
 If VMware shows an auto-login option, do not enable it for the workstation
 baseline.
@@ -826,24 +944,27 @@ The public `kali/kali` default credentials are changed during first boot.
 
 ---
 
-## 31. Advanced Options
+## 32. Advanced Options
 
-Leave advanced VM options at their supplied defaults unless this repository or
-a specific authorized lab instructs you to change one.
+After completing the deliberate virtual-hardware compatibility review earlier
+in this guide, leave other advanced VM options at their supplied defaults
+unless this repository or a specific authorized lab instructs you to change
+one.
 
-Avoid changing compatibility, firmware, virtualization-engine, or isolation
-flags simply because they are available.
+Avoid changing firmware, virtualization-engine, or isolation flags simply
+because they are available.
 
 A stable known-good configuration is more valuable than maximizing the number
 of customized settings.
 
 ---
 
-## 32. Recommended Baseline Summary
+## 33. Recommended Baseline Summary
 
 For a typical 32 GB Windows 11 host, the repository baseline is:
 
 ```text
+Hardware Compatibility: Newest level supported by the installed Workstation release
 Memory: 8 GB
 vCPUs: 4
 Hard Disk: Existing Kali virtual disk
@@ -885,12 +1006,13 @@ and use:
 
 ---
 
-## 33. Resource Reference Table
+## 34. Resource Reference Table
 
 Use this quick reference before clicking **OK**.
 
 | Setting | 8 GB host | 16 GB host | 32 GB+ host |
 | --- | --- | --- | --- |
+| Hardware compatibility | Newest supported by installed Workstation | Newest supported by installed Workstation | Newest supported by installed Workstation |
 | Kali RAM | 2 GB | 4 GB | 8 GB |
 | Processors | 1 | 1 | 1 |
 | Cores per processor | 2 | 2 initially | 4 |
@@ -907,7 +1029,7 @@ benefits from them and Windows still has enough CPU capacity.
 
 ---
 
-## 34. Save the VMware Configuration
+## 35. Save the VMware Configuration
 
 After reviewing the settings, click:
 
@@ -923,7 +1045,7 @@ The virtual-machine configuration is now ready for the first boot.
 
 ---
 
-## 35. If VMware Refuses a Setting Change
+## 36. If VMware Refuses a Setting Change
 
 Some virtual-hardware changes require the VM to be fully powered off.
 
@@ -942,7 +1064,7 @@ documented troubleshooting procedure specifically requires it.
 
 ---
 
-## 36. Do Not Chase the Screenshot Exactly
+## 37. Do Not Chase the Screenshot Exactly
 
 VMware and Kali releases change.
 
@@ -961,6 +1083,7 @@ historical screenshot pixel-for-pixel.
 The most important settings are:
 
 ```text
+Current supported virtual-hardware compatibility
 Right-sized memory
 Right-sized vCPU count
 Existing Kali disk preserved
@@ -970,11 +1093,13 @@ Unnecessary integration disabled
 
 ---
 
-## 37. Configuration Checklist
+## 38. Configuration Checklist
 
 Before first boot, verify:
 
 - [ ] The Kali VM is powered off while hardware settings are changed
+- [ ] `Workstation 8.x` is understood as a legacy VM compatibility profile, not the installed VMware application version
+- [ ] Virtual hardware compatibility was reviewed and upgraded to the newest level supported by the installed Workstation release
 - [ ] Memory matches the host-resource recommendation
 - [ ] The host retains enough RAM for Windows
 - [ ] The virtual CPU allocation is understood
@@ -994,6 +1119,10 @@ Before first boot, verify:
 
 The Kali virtual machine is now ready for its first controlled boot.
 
+Previous:
+
+[04 — Extract and Open the Kali VMware Virtual Machine](04-extract-and-open-kali-vm.md)
+
 Continue to:
 
-[First Boot and Account Security](06-first-boot-and-account-security.md)
+[06 — First Boot and Account Security](06-first-boot-and-account-security.md)

@@ -30,6 +30,7 @@ write_result() {
 
 finish() {
     local exit_code="$1"
+    local result_override="${2:-}"
 
     printf '\n'
     printf '===============================================\n'
@@ -41,7 +42,9 @@ finish() {
     printf 'INFO : %s\n' "$INFO"
     printf '\n'
 
-    if (( exit_code != 0 )); then
+    if [[ -n "$result_override" ]]; then
+        printf 'Overall Result: %s\n' "$result_override"
+    elif (( exit_code != 0 )); then
         printf 'Overall Result: UPDATE NEEDS ATTENTION\n'
     elif (( WARN > 0 )); then
         printf 'Overall Result: UPDATE COMPLETE WITH REVIEW ITEMS\n'
@@ -76,10 +79,11 @@ fi
 
 # Require a normal user account with sudo rather than a root login.
 if (( EUID == 0 )); then
-    write_result WARN "User context" "The script is running as root; using a normal Kali account with sudo is recommended"
-else
-    write_result PASS "User context" "Running as user: ${USER:-$(id -un)}"
+    write_result FAIL "User context" "Do not run this script as root or with sudo"
+    finish 1
 fi
+
+write_result PASS "User context" "Running as user: ${USER:-$(id -un)}"
 
 if ! command -v sudo >/dev/null 2>&1; then
     write_result FAIL "sudo" "sudo is not available"
@@ -160,8 +164,8 @@ case "$RESPONSE" in
     y|Y|yes|YES|Yes)
         ;;
     *)
-        write_result INFO "Full upgrade" "Upgrade was cancelled by the user"
-        finish 0
+        write_result WARN "Full upgrade" "Upgrade was cancelled; the full system upgrade was not performed"
+        finish 2 "UPDATE CANCELLED"
         ;;
 esac
 

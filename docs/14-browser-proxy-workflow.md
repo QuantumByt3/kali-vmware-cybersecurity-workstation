@@ -258,5 +258,12 @@ Before continuing, verify:
 - [ ] Proxy certificates remain limited to the lab browser profile
 - [ ] Personal browsing remains outside the proxied profile
 
-The next phase will inventory networking and Active Directory tools used for
-authorized labs and CTF environments.
+The dedicated browser and interception-proxy workflow is now configured.
+
+Previous:
+
+[13 — Web Security Tools](13-web-security-tools.md)
+
+Continue to:
+
+[15 — Network and Active Directory Tools](15-network-ad-tools.md)

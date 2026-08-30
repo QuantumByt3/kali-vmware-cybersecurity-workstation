@@ -16,6 +16,11 @@ From the root of this repository inside Kali, run:
 bash scripts/kali/profiles/Install-BlueTeamDFIRTools.sh
 ```
 
+Run the script from the normal Kali account. Do not prefix the command with
+`sudo` and do not run it from a root shell. The profile requests `sudo` only
+for APT package-management operations; the isolated Volatility 3 installation
+runs as the normal user through `pipx`.
+
 Enter your Kali password if `sudo` prompts for it.
 
 The script checks the existing workstation first and installs only missing
@@ -229,6 +234,10 @@ y
 
 and press **Enter** to install it.
 
+If required APT packages are missing and you decline their installation, the
+profile reports `Overall Result: BLUE-TEAM/DFIR PROFILE NEEDS ATTENTION` and
+returns exit code `1`.
+
 The script does not use:
 
 ```bash
@@ -236,6 +245,12 @@ sudo pip install
 ```
 
 and does not modify Kali's system Python environment.
+
+Volatility 3 and its `vol` command are required by the complete blue-team/DFIR
+profile. If you decline the Volatility 3 installation when it is missing, or
+if `vol` is still unavailable after installation review, the script reports a
+failure and returns exit code `1`. Do not continue until the profile completes
+successfully.
 
 ---
 
@@ -323,5 +338,12 @@ Before continuing, verify:
 - [ ] The profile returned exit code `0`
 - [ ] Running the profile again does not reinstall existing components
 
-The next phase will configure Python, Git, shell, and terminal workflow for the
-Kali workstation.
+The focused blue-team and DFIR tool profile is now verified.
+
+Previous:
+
+[15 — Network and Active Directory Tools](15-network-ad-tools.md)
+
+Continue to:
+
+[17 — Development Environment](17-development-environment.md)

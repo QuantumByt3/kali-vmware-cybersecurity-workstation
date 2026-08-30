@@ -1,4 +1,4 @@
-#requires -Version 7.0
+#requires -Version 5.1
 
 [CmdletBinding()]
 param()
@@ -525,6 +525,299 @@ else {
         Format-Table Source, Line, Target -AutoSize
 }
 
+Write-Section "README Fresh-Clone Layout Scan"
+
+$ReadmeLayoutFindings = [System.Collections.Generic.List[object]]::new()
+$LayoutFiles = [System.Collections.Generic.List[string]]::new()
+$LayoutDirectories = [System.Collections.Generic.List[string]]::new()
+$ReadmePath = Join-Path $RepoRoot 'README.md'
+
+$TrackedRepositoryFiles = @(
+    git ls-files --cached |
+        Where-Object { $_ -and $_.Trim() -ne '' } |
+        Sort-Object -Unique
+)
+
+if ($LASTEXITCODE -ne 0) {
+    Write-Host "[FAIL] Unable to enumerate Git-tracked repository files for the README layout check."
+    exit 1
+}
+
+$TrackedDirectoryList = [System.Collections.Generic.List[string]]::new()
+
+foreach ($TrackedFile in $TrackedRepositoryFiles) {
+    $PathParts = @($TrackedFile -split '/')
+
+    for ($PartCount = 1; $PartCount -lt $PathParts.Count; $PartCount++) {
+        $DirectoryPath = ($PathParts[0..($PartCount - 1)] -join '/')
+        $TrackedDirectoryList.Add($DirectoryPath)
+    }
+}
+
+$TrackedRepositoryDirectories = @(
+    $TrackedDirectoryList |
+        Sort-Object -Unique
+)
+
+if (-not (Test-Path -LiteralPath $ReadmePath -PathType Leaf)) {
+    Add-Finding `
+        -List $ReadmeLayoutFindings `
+        -File 'README.md' `
+        -Category 'README.md is missing'
+}
+else {
+    $ReadmeLines = @(Get-Content -LiteralPath $ReadmePath)
+    $LayoutHeaderIndex = -1
+    $LayoutFenceStart = -1
+    $LayoutFenceEnd = -1
+
+    for ($Index = 0; $Index -lt $ReadmeLines.Count; $Index++) {
+        if ($ReadmeLines[$Index].Trim() -eq '# Repository Layout') {
+            $LayoutHeaderIndex = $Index
+            break
+        }
+    }
+
+    if ($LayoutHeaderIndex -lt 0) {
+        Add-Finding `
+            -List $ReadmeLayoutFindings `
+            -File 'README.md' `
+            -Category 'Repository Layout heading is missing'
+    }
+    else {
+        for ($Index = $LayoutHeaderIndex + 1; $Index -lt $ReadmeLines.Count; $Index++) {
+            if ($ReadmeLines[$Index].Trim() -eq '```text') {
+                $LayoutFenceStart = $Index
+                break
+            }
+        }
+
+        if ($LayoutFenceStart -lt 0) {
+            Add-Finding `
+                -List $ReadmeLayoutFindings `
+                -File 'README.md' `
+                -Category 'Repository Layout text block is missing'
+        }
+        else {
+            for ($Index = $LayoutFenceStart + 1; $Index -lt $ReadmeLines.Count; $Index++) {
+                if ($ReadmeLines[$Index].Trim() -eq '```') {
+                    $LayoutFenceEnd = $Index
+                    break
+                }
+            }
+
+            if ($LayoutFenceEnd -lt 0) {
+                Add-Finding `
+                    -List $ReadmeLayoutFindings `
+                    -File 'README.md' `
+                    -Category 'Repository Layout text block is not closed'
+            }
+        }
+    }
+
+    if ($LayoutFenceStart -ge 0 -and $LayoutFenceEnd -gt $LayoutFenceStart) {
+        $DirectoryStack = @()
+        $TreeEntryPattern = '^(?<prefix>(?:(?:\|   )|(?:    ))*)(?<branch>\|-- |`-- )(?<name>.+)$'
+
+        for ($Index = $LayoutFenceStart + 1; $Index -lt $LayoutFenceEnd; $Index++) {
+            $TreeLine = $ReadmeLines[$Index]
+            $TrimmedTreeLine = $TreeLine.Trim()
+
+            if (
+                [string]::IsNullOrWhiteSpace($TrimmedTreeLine) -or
+                $TreeLine -match '^[| ]+$'
+            ) {
+                continue
+            }
+
+            if ($TrimmedTreeLine -eq 'kali-vmware-cybersecurity-workstation/') {
+                continue
+            }
+
+            $TreeMatch = [regex]::Match($TreeLine, $TreeEntryPattern)
+
+            if (-not $TreeMatch.Success) {
+                Add-Finding `
+                    -List $ReadmeLayoutFindings `
+                    -File 'README.md' `
+                    -Line ($Index + 1) `
+                    -Category 'Unparsed repository-layout line'
+                continue
+            }
+
+            $Prefix = $TreeMatch.Groups['prefix'].Value
+            $EntryName = $TreeMatch.Groups['name'].Value.Trim()
+
+            if (($Prefix.Length % 4) -ne 0) {
+                Add-Finding `
+                    -List $ReadmeLayoutFindings `
+                    -File 'README.md' `
+                    -Line ($Index + 1) `
+                    -Category 'Invalid repository-layout indentation'
+                continue
+            }
+
+            $Depth = [int]($Prefix.Length / 4)
+
+            while ($DirectoryStack.Count -le $Depth) {
+                $DirectoryStack += $null
+            }
+
+            if ($EntryName.EndsWith('/')) {
+                $DirectoryName = $EntryName.TrimEnd([char]'/')
+                $DirectoryStack[$Depth] = $DirectoryName
+
+                for (
+                    $StackIndex = $Depth + 1;
+                    $StackIndex -lt $DirectoryStack.Count;
+                    $StackIndex++
+                ) {
+                    $DirectoryStack[$StackIndex] = $null
+                }
+
+                $DirectoryParts = @()
+                $DirectoryPathIsValid = $true
+
+                for ($PartIndex = 0; $PartIndex -le $Depth; $PartIndex++) {
+                    if ([string]::IsNullOrWhiteSpace($DirectoryStack[$PartIndex])) {
+                        $DirectoryPathIsValid = $false
+                        break
+                    }
+
+                    $DirectoryParts += $DirectoryStack[$PartIndex]
+                }
+
+                if ($DirectoryPathIsValid) {
+                    $LayoutDirectories.Add(($DirectoryParts -join '/'))
+                }
+                else {
+                    Add-Finding `
+                        -List $ReadmeLayoutFindings `
+                        -File 'README.md' `
+                        -Line ($Index + 1) `
+                        -Category 'Repository-layout directory has no valid parent'
+                }
+
+                continue
+            }
+
+            $FileParts = @()
+            $FilePathIsValid = $true
+
+            for ($PartIndex = 0; $PartIndex -lt $Depth; $PartIndex++) {
+                if (
+                    $PartIndex -ge $DirectoryStack.Count -or
+                    [string]::IsNullOrWhiteSpace($DirectoryStack[$PartIndex])
+                ) {
+                    $FilePathIsValid = $false
+                    break
+                }
+
+                $FileParts += $DirectoryStack[$PartIndex]
+            }
+
+            if ($FilePathIsValid) {
+                $FileParts += $EntryName
+                $LayoutFiles.Add(($FileParts -join '/'))
+            }
+            else {
+                Add-Finding `
+                    -List $ReadmeLayoutFindings `
+                    -File 'README.md' `
+                    -Line ($Index + 1) `
+                    -Category 'Repository-layout file has no valid parent'
+            }
+        }
+    }
+}
+
+$LayoutFilesUnique = @(
+    $LayoutFiles |
+        Sort-Object -Unique
+)
+
+$LayoutDirectoriesUnique = @(
+    $LayoutDirectories |
+        Sort-Object -Unique
+)
+
+$DuplicateLayoutFiles = @(
+    $LayoutFiles |
+        Group-Object |
+        Where-Object { $_.Count -gt 1 }
+)
+
+$DuplicateLayoutDirectories = @(
+    $LayoutDirectories |
+        Group-Object |
+        Where-Object { $_.Count -gt 1 }
+)
+
+foreach ($Duplicate in $DuplicateLayoutFiles) {
+    Add-Finding `
+        -List $ReadmeLayoutFindings `
+        -File 'README.md' `
+        -Category "Duplicate layout file: $($Duplicate.Name)"
+}
+
+foreach ($Duplicate in $DuplicateLayoutDirectories) {
+    Add-Finding `
+        -List $ReadmeLayoutFindings `
+        -File 'README.md' `
+        -Category "Duplicate layout directory: $($Duplicate.Name)"
+}
+
+foreach ($TrackedFile in $TrackedRepositoryFiles) {
+    if ($LayoutFilesUnique -notcontains $TrackedFile) {
+        Add-Finding `
+            -List $ReadmeLayoutFindings `
+            -File 'README.md' `
+            -Category "Tracked file missing from layout: $TrackedFile"
+    }
+}
+
+foreach ($LayoutFile in $LayoutFilesUnique) {
+    if ($TrackedRepositoryFiles -notcontains $LayoutFile) {
+        Add-Finding `
+            -List $ReadmeLayoutFindings `
+            -File 'README.md' `
+            -Category "Layout file is not Git-tracked: $LayoutFile"
+    }
+}
+
+foreach ($TrackedDirectory in $TrackedRepositoryDirectories) {
+    if ($LayoutDirectoriesUnique -notcontains $TrackedDirectory) {
+        Add-Finding `
+            -List $ReadmeLayoutFindings `
+            -File 'README.md' `
+            -Category "Tracked directory missing from layout: $TrackedDirectory"
+    }
+}
+
+foreach ($LayoutDirectory in $LayoutDirectoriesUnique) {
+    if ($TrackedRepositoryDirectories -notcontains $LayoutDirectory) {
+        Add-Finding `
+            -List $ReadmeLayoutFindings `
+            -File 'README.md' `
+            -Category "Layout directory has no tracked contents: $LayoutDirectory"
+    }
+}
+
+Write-Host "Tracked files             : $($TrackedRepositoryFiles.Count)"
+Write-Host "README layout files       : $($LayoutFilesUnique.Count)"
+Write-Host "Tracked directories       : $($TrackedRepositoryDirectories.Count)"
+Write-Host "README layout directories : $($LayoutDirectoriesUnique.Count)"
+Write-Host "README layout findings    : $($ReadmeLayoutFindings.Count)"
+
+if ($ReadmeLayoutFindings.Count -eq 0) {
+    Write-Host "[PASS] README fresh-clone layout matches the Git-tracked repository tree."
+}
+else {
+    Write-Host "[FAIL] README fresh-clone layout does not match the Git-tracked repository tree:"
+    $ReadmeLayoutFindings |
+        Sort-Object Line, Category -Unique |
+        Format-Table File, Line, Category -AutoSize
+}
 Write-Section "Git Ignore Protection"
 
 $IgnoreChecks = @(
@@ -561,6 +854,7 @@ $FailureCount += $CRLFFiles.Count
 $FailureCount += $LoneCRFiles.Count
 $FailureCount += $BrokenLinks.Count
 $FailureCount += $MissingDocumentedPaths.Count
+$FailureCount += $ReadmeLayoutFindings.Count
 $FailureCount += $IgnoreFailures.Count
 
 Write-Host "Forbidden artifacts       : $($ForbiddenFindings.Count)"
@@ -570,6 +864,7 @@ Write-Host "CRLF files                : $($CRLFFiles.Count)"
 Write-Host "Lone-CR files             : $($LoneCRFiles.Count)"
 Write-Host "Broken internal links     : $($BrokenLinks.Count)"
 Write-Host "Missing documented paths  : $($MissingDocumentedPaths.Count)"
+Write-Host "README layout findings    : $($ReadmeLayoutFindings.Count)"
 Write-Host "Git ignore failures       : $($IgnoreFailures.Count)"
 
 if ($FailureCount -eq 0) {

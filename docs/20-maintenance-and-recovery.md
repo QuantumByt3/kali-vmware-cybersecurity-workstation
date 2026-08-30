@@ -73,8 +73,20 @@ Use:
 bash scripts/kali/Update-Kali.sh
 ```
 
-The helper checks the system, refreshes APT metadata, reports available
-upgrades, and asks before performing a full upgrade.
+Run the helper from the normal Kali account, not from a root shell or with
+`sudo`. It validates the Kali operating system, `sudo` authorization, a default
+route, DNS resolution, and the expected Kali rolling repository before
+refreshing APT metadata and reporting available upgrades.
+
+The helper then asks before performing `sudo apt full-upgrade -y`. If you
+decline, it reports:
+
+```text
+Overall Result: UPDATE CANCELLED
+```
+
+and returns exit code `2`. A cancelled run is not a completed maintenance
+update.
 
 It does not automatically reboot the VM.
 
@@ -108,17 +120,32 @@ Run:
 bash scripts/kali/Test-KaliReadiness.sh
 ```
 
-A healthy result ends with:
+A fully clean result ends with:
 
 ```text
 Overall Result: KALI WORKSTATION READINESS VERIFIED
 ```
 
-and:
+A workstation with non-blocking warnings can instead end with:
 
 ```text
-Exit code: 0
+Overall Result: KALI WORKSTATION READY WITH REVIEW ITEMS
 ```
+
+Both states return exit code `0`. The script does not print an `Exit code:`
+line automatically, so check it immediately afterward with:
+
+```bash
+echo $?
+```
+
+A blocking readiness failure reports:
+
+```text
+Overall Result: KALI WORKSTATION NEEDS ATTENTION
+```
+
+and returns exit code `1`.
 
 Review warnings or failures before making additional changes.
 
@@ -127,6 +154,10 @@ Review warnings or failures before making additional changes.
 ## 7. Re-run a Focused Profile When Needed
 
 If an update changes or removes a tool, run only the relevant profile.
+
+Run each installer from the normal Kali account. If a required package is
+missing and you decline its installation, the profile returns exit code `1`
+because the documented baseline remains incomplete.
 
 Core tools:
 
@@ -214,6 +245,10 @@ Periodically run:
 bash scripts/kali/Harden-Kali.sh
 ```
 
+Run this audit from the normal Kali account. It requires working `sudo`
+authorization for privileged read-only checks but does not stop services or
+change configuration.
+
 This audit-oriented helper reviews:
 
 - User context
@@ -222,6 +257,10 @@ This audit-oriented helper reviews:
 - Common server services
 - Listener state
 - VMware environment
+
+A clean audit returns `SECURITY BASELINE VERIFIED`; review-item warnings return
+`BASELINE READY WITH REVIEW ITEMS`; blocking failures return
+`BASELINE NEEDS ATTENTION`.
 
 Review warnings before changing service configuration.
 
@@ -452,5 +491,12 @@ If something breaks:
 - [ ] Re-test after each correction
 - [ ] Preserve important files before rollback or rebuild
 
-The next phase performs repository-wide validation before the first public
-commit and push.
+The maintenance and recovery workflow is now documented.
+
+Previous:
+
+[19 — VMware Networking](19-vmware-networking.md)
+
+Continue to the repository-wide final validation:
+
+[README — Final Workstation Checks](../README.md#final-workstation-checks)

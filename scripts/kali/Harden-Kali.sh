@@ -123,13 +123,22 @@ else
     write_result PASS "User context" "Running as non-root user: ${USER:-$(id -un)}"
 fi
 
-# Confirm sudo exists and the current account belongs to the sudo group.
-if command -v sudo >/dev/null 2>&1; then
-    write_result PASS "sudo" "sudo is installed"
-else
+# Confirm sudo exists and administrative authorization is available.
+if ! command -v sudo >/dev/null 2>&1; then
     write_result FAIL "sudo" "sudo is not installed"
+    finish
 fi
 
+write_result PASS "sudo" "sudo is installed"
+
+if ! sudo -v; then
+    write_result FAIL "sudo authorization" "Administrative authorization failed"
+    finish
+fi
+
+write_result PASS "sudo authorization" "Administrative authorization is available"
+
+# Review sudo-group membership separately from successful sudo authorization.
 if id -nG 2>/dev/null | tr ' ' '\n' | grep -qx 'sudo'; then
     write_result PASS "sudo group" "Current account belongs to the sudo group"
 else

@@ -468,5 +468,12 @@ Before using Kali for a lab, verify:
 - [ ] VPN scope is understood before testing
 - [ ] Private network information is sanitized before publication
 
-The next phase will add a read-only networking validation script so a beginner
-can quickly identify the active VMware network state without changing it.
+The VMware networking baseline and lab-isolation guidance are now documented.
+
+Previous:
+
+[18 — Workspace Helpers](18-workspace-helpers.md)
+
+Continue to:
+
+[20 — Maintenance and Recovery](20-maintenance-and-recovery.md)

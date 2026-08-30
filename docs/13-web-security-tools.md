@@ -17,6 +17,10 @@ From the root of this repository inside Kali, run:
 bash scripts/kali/profiles/Install-WebTools.sh
 ```
 
+Run the script from the normal Kali account. Do not prefix the command with
+`sudo` and do not run it from a root shell. The profile requests `sudo` only
+for package-management operations.
+
 Enter your Kali password if `sudo` prompts for it.
 
 The script refreshes package information and checks which required packages
@@ -45,6 +49,16 @@ SQLMap
 ```
 
 The script installs only packages that are missing.
+
+If required web-security packages are missing and you decline the installation
+prompt, the profile remains incomplete. The script reports:
+
+```text
+Overall Result: WEB TOOL PROFILE NEEDS ATTENTION
+```
+
+and returns exit code `1`. Run the profile again and approve installation
+before continuing.
 
 ---
 
@@ -262,5 +276,12 @@ Before continuing, verify:
 - [ ] The profile completed with `FAIL : 0`
 - [ ] The profile returned exit code `0`
 
-The next step will configure the dedicated browser and interception-proxy
-workflow for authorized web-security labs.
+The focused web-security tool profile is now verified.
+
+Previous:
+
+[12 — CTF Tools](12-ctf-tools.md)
+
+Continue to:
+
+[14 — Browser and Proxy Workflow](14-browser-proxy-workflow.md)

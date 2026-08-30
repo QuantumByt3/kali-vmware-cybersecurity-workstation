@@ -391,6 +391,12 @@ Before continuing, verify:
 - [ ] Neither helper automatically acquires or modifies evidence
 - [ ] Sensitive artifacts are reviewed before publication
 
-The next phase covers VMware networking modes and how to choose the safest
-network configuration for normal workstation use, CTF labs, and isolated
-practice environments.
+The reusable CTF and DFIR workspace helpers are now documented and verified.
+
+Previous:
+
+[17 — Development Environment](17-development-environment.md)
+
+Continue to:
+
+[19 — VMware Networking](19-vmware-networking.md)

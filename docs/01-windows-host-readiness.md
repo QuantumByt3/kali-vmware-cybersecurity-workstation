@@ -694,34 +694,63 @@ The script performs read-only checks for:
 - Windows 11
 - 64-bit architecture
 - Installed memory
-- Available storage
+- Available storage on the Windows system drive (`$env:SystemDrive`)
 - Hardware virtualization or active hypervisor state
 - Common pending-restart conditions
 
-It does not change BIOS settings, Windows features, or system configuration.
+It also prints an informational Windows Update reminder. The validator does not
+determine whether Windows Update is fully current and does not test Internet
+connectivity. Complete those checks manually in Sections 8 and 18.
+
+The script itself does not prompt for input, request elevation, change BIOS
+settings, change Windows features, or modify system configuration.
 
 ---
 
 ## 24. Understand the Validator Result
 
-A healthy host should end with:
+A host with no failures and no warnings ends with:
 
 ```text
 Overall Result: READY
 ```
 
-and:
+A host with warnings but no failures ends with:
 
 ```text
-Exit code: 0
+Overall Result: READY WITH REVIEW
+```
+
+Both results return process exit code:
+
+```text
+0
+```
+
+The script does not print an `Exit code:` line automatically. To inspect the
+process exit code immediately after the script finishes, run:
+
+```powershell
+$LASTEXITCODE
+```
+
+If one or more blocking checks fail, the script ends with:
+
+```text
+Overall Result: NOT READY
+```
+
+and returns process exit code:
+
+```text
+1
 ```
 
 Warnings should be reviewed before continuing.
 
-A failure should be corrected before VMware installation.
+A blocking failure should be corrected before VMware installation.
 
-The validator may report informational messages that do not represent a
-failure.
+Informational messages do not represent failures.
 
 ---
 
@@ -911,6 +940,10 @@ Before installing VMware Workstation Pro, verify:
 
 The Windows host is now ready for VMware Workstation Pro.
 
+Previous:
+
+[00 — Get the Repository Before Running Repository Scripts](00-get-the-repository.md)
+
 Continue to:
 
-[Install VMware Workstation Pro](02-install-vmware-workstation.md)
+[02 — Install VMware Workstation Pro](02-install-vmware-workstation.md)

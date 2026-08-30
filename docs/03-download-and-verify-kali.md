@@ -174,10 +174,20 @@ specific VMware archive.
 
 The script verifies:
 
-- The archive exists.
-- The filename matches the expected Kali VMware naming pattern.
-- The expected checksum is formatted as SHA-256.
-- The downloaded file's SHA-256 value matches the official value.
+- The supplied path resolves to a local file.
+- The file uses the `.7z` extension.
+- The filename matches the expected `kali-linux-...-vmware-amd64.7z` pattern.
+- The expected checksum is exactly 64 hexadecimal characters.
+- The downloaded file's SHA-256 value matches the supplied official value.
+
+The script is read-only and non-interactive. It does not require elevation,
+extract the archive, download files, or change system configuration.
+
+The `ExpectedHash` format is enforced by PowerShell parameter validation before
+the script body runs. If the value is not exactly 64 hexadecimal characters,
+PowerShell rejects the parameter instead of producing the normal verification
+summary. Recopy the checksum from Kali's official download page and run the
+command again.
 
 ---
 
@@ -209,6 +219,39 @@ The values must match exactly.
 
 A matching SHA-256 checksum confirms that the downloaded archive has the same
 content as the file represented by the checksum published by Kali.
+
+When the repository script succeeds, it ends with:
+
+```text
+Overall Result: KALI DOWNLOAD VERIFIED
+The archive may now be extracted.
+```
+
+and returns process exit code:
+
+```text
+0
+```
+
+To inspect the exit code immediately after the script finishes, run:
+
+```powershell
+$LASTEXITCODE
+```
+
+If the archive path, archive type, filename pattern, hash calculation, or
+SHA-256 comparison fails, the script ends with:
+
+```text
+Overall Result: VERIFICATION FAILED
+Do not extract or open the Kali archive.
+```
+
+and returns process exit code:
+
+```text
+1
+```
 
 If the values match, continue to extraction.
 
@@ -355,8 +398,8 @@ Before continuing, verify:
 
 Previous:
 
-[Install VMware Workstation Pro](02-install-vmware-workstation.md)
+[02 — Install VMware Workstation Pro](02-install-vmware-workstation.md)
 
 Continue to:
 
-[Extract and Open the Kali VMware Virtual Machine](04-extract-and-open-kali-vm.md)
+[04 — Extract and Open the Kali VMware Virtual Machine](04-extract-and-open-kali-vm.md)
