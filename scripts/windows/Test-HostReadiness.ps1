@@ -154,7 +154,7 @@ if ($null -ne $PendingRename.PendingFileRenameOperations) {
 }
 
 if ($RestartPending) {
-    Write-Result 'WARN' 'Pending restart' 'Windows may require a restart before VMware is installed'
+    Write-Result 'WARN' 'Pending restart' 'Windows reports a pending restart; reboot when practical before major workstation changes'
 }
 else {
     Write-Result 'PASS' 'Pending restart' 'No common pending-restart indicators detected'

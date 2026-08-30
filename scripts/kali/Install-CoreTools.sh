@@ -159,7 +159,7 @@ for package in "${PACKAGES[@]}"; do
 
     candidate="$(
         apt-cache policy "$package" 2>/dev/null |
-            awk '/Candidate:/ {print $2; exit}'
+            awk '/Candidate:/ {candidate=$2} END {print candidate}'
     )"
 
     if [[ -z "$candidate" || "$candidate" == "(none)" ]]; then

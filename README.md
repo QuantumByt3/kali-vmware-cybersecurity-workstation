@@ -616,7 +616,8 @@ adapter addresses.
 
 Audits the publishable repository tree for sensitive content, forbidden
 artifacts, line-ending problems, broken internal links, missing documented
-paths, unfinished content, and `.gitignore` regressions.
+paths, README fresh-clone tree drift from Git-tracked files and directories,
+unfinished content, and `.gitignore` regressions.
 
 ```powershell
 .\scripts\windows\Test-RepositorySafety.ps1
