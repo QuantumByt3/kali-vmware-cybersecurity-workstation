@@ -43,13 +43,11 @@ access.
 This repository is documentation and automation rather than a packaged
 application with multiple maintained release branches.
 
-The supported project version is:
+The supported project version is the current public default branch:
 
 ```text
 main
 ```
-
-after the repository is published.
 
 If tagged releases are created later, the most recent supported release will
 normally be the current release unless the repository explicitly states
@@ -109,14 +107,14 @@ Do not include sensitive information in a normal bug report.
 
 ## 6. Preferred Security Reporting Method
 
-For a published public repository, the preferred reporting method is GitHub
-Private Vulnerability Reporting when the repository displays:
+The preferred reporting method is GitHub Private Vulnerability Reporting
+through the repository's Security interface.
 
-```text
-Report a vulnerability
-```
+Use:
 
-under its security interface.
+[Report a vulnerability privately](https://github.com/QuantumByt3/kali-vmware-cybersecurity-workstation/security/advisories/new)
+
+Do not place sensitive vulnerability details in a public issue.
 
 GitHub documents that workflow here:
 
@@ -254,8 +252,8 @@ also necessary.
 
 ## 12. Secret Scanning
 
-After publication, repository security settings should enable appropriate
-GitHub secret-protection features where available.
+Repository security settings should use appropriate GitHub secret-protection
+features where available.
 
 GitHub secret scanning can identify supported credential patterns exposed in
 repository content.
@@ -617,19 +615,26 @@ assets/sanitized-images/
 
 The project uses layered validation before publication.
 
-Checks include:
+CI and local checks include:
 
 - PowerShell parsing
+- PSScriptAnalyzer
 - Bash syntax
 - ShellCheck
-- Internal Markdown-link validation
-- External-link validation
-- Script-path validation
-- Sensitive-data scanning
+- Sensitive-content scanning
 - Forbidden-artifact scanning
-- Line-ending validation
-- Git staged-content review
-- `git diff --cached --check`
+- Unfinished-content scanning
+- LF line-ending validation
+- Internal Markdown-link validation
+- Documented repository-path validation
+- README fresh-clone layout validation against Git-tracked files and
+  directories
+- `.gitignore` protection checks
+- `git diff --check` during change review
+
+External links, compatibility claims, runtime behavior, and security-sensitive
+changes still require human review and, when relevant, targeted runtime
+validation.
 
 Passing automated checks does not prove the absence of every vulnerability.
 
@@ -645,7 +650,8 @@ Where practical:
 
 - Use read-only repository permissions
 - Avoid exposing secrets to pull requests
-- Pin or deliberately version third-party actions
+- Pin third-party actions to reviewed full commit SHAs and keep the
+  human-readable version annotation current
 - Avoid executing untrusted pull-request content with elevated permissions
 - Keep validation workflows non-destructive
 - Treat workflow changes as security-sensitive
@@ -756,9 +762,8 @@ This policy may evolve as the repository gains:
 
 - Releases
 - Contributors
-- CI workflows
 - Additional dependencies
-- GitHub security features
+- New GitHub security features
 - New automation
 
 Material changes should be committed to the repository so that the policy

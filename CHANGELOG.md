@@ -6,7 +6,7 @@ be documented in this file.
 This project follows a simple release-history format inspired by common
 open-source changelog practices.
 
-The repository is currently preparing its first public release.
+The repository is public and continues development toward its first versioned release.
 
 ---
 
@@ -47,7 +47,7 @@ The repository is currently preparing its first public release.
 - Kali development-environment configurator
 - Kali network-readiness validator
 - Kali workstation-readiness validator
-- Optional Kali tool-profile installers
+- Focused Kali tool-profile installers
 - Workspace initialization helper
 - CTF workspace generator
 - DFIR case-workspace generator
@@ -83,7 +83,7 @@ The repository is currently preparing its first public release.
 - Repository text files use LF line endings
 - Internal Markdown links resolve
 - Documented repository paths resolve
-- Clickable external links were validated
+- Official external links were reviewed during documentation audits
 - Sensitive-data scans return no findings
 - Forbidden-artifact scans return no findings
 - Unfinished-content scans return no findings
@@ -224,23 +224,27 @@ versions remain subject to the license terms under which they were released.
 
 ---
 
-## Initial Public Release
+## First Versioned Release
 
-The first versioned release will be created only after:
+The repository is already public. The first versioned release should be created
+only after the current public-development baseline is ready to freeze.
 
-- Repository governance files are complete
-- GitHub Actions validation is configured
-- Repository security settings are reviewed
-- All local validation passes
-- The initial commit is created
-- The repository is pushed successfully
-- The default branch is protected appropriately
-- Public repository metadata is configured
-- The published README renders correctly
-- GitHub community-health files are recognized
-- The first CI run passes
+Before creating that release:
 
-Until then, all current work remains under:
+- Complete the governance and publication-readiness audit
+- Confirm `main` is synchronized and protected by the intended ruleset
+- Confirm the README, guides, scripts, policies, and third-party notices agree
+  with the release baseline
+- Run the repository safety validation and required GitHub Actions workflow
+- Re-run material Windows, VMware, or Kali runtime checks when a release change
+  affects those behaviors
+- Move the relevant entries from **Unreleased** into the new versioned section
+- Review the final release diff for private data, forbidden artifacts, and
+  unintended compatibility changes
+- Create the release tag and GitHub release only after the release commit and CI
+  are verified
+
+Until a versioned release is created, current public development remains under:
 
 ```text
 [Unreleased]

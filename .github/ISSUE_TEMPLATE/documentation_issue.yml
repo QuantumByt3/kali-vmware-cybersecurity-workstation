@@ -9,7 +9,7 @@ body:
 
         Use this form for documentation problems that do not expose sensitive security information.
 
-        **Do not post passwords, tokens, keys, private network details, private paths, or vulnerability details in a public issue.** Follow the repository's [Security Policy](../../SECURITY.md) for sensitive reports.
+        **Do not post passwords, tokens, keys, private network details, private paths, or vulnerability details in a public issue.** Follow the repository's [Security Policy](https://github.com/QuantumByt3/kali-vmware-cybersecurity-workstation/security/policy) for sensitive reports.
 
   - type: dropdown
     id: documentation_area

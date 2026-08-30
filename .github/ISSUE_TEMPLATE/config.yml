@@ -1,6 +1,9 @@
 blank_issues_enabled: false
 
 contact_links:
+  - name: Read the Security Policy
+    url: https://github.com/QuantumByt3/kali-vmware-cybersecurity-workstation/security/policy
+    about: Review the repository's security-reporting guidance before disclosing security-sensitive information.
   - name: Report a security vulnerability privately
     url: https://github.com/QuantumByt3/kali-vmware-cybersecurity-workstation/security/advisories/new
     about: Use GitHub private vulnerability reporting for sensitive security issues. Do not disclose vulnerability details in a public issue.

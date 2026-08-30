@@ -268,7 +268,7 @@ transfer ownership of that tool or alter its license.
 
 ## 11. Cybersecurity Tools
 
-The optional tool profiles reference numerous independent cybersecurity
+The focused tool profiles reference numerous independent cybersecurity
 projects.
 
 Examples may include tools used for:

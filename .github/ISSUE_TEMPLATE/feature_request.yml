@@ -9,7 +9,7 @@ body:
 
         Feature requests should support the repository's goal of providing a beginner-friendly, reproducible, and security-conscious Kali VMware workstation for authorized cybersecurity use.
 
-        **Do not use a public feature request to disclose vulnerabilities, secrets, private network information, or other sensitive data.** Follow the repository's [Security Policy](../../SECURITY.md) for sensitive reports.
+        **Do not use a public feature request to disclose vulnerabilities, secrets, private network information, or other sensitive data.** Follow the repository's [Security Policy](https://github.com/QuantumByt3/kali-vmware-cybersecurity-workstation/security/policy) for sensitive reports.
 
   - type: dropdown
     id: area

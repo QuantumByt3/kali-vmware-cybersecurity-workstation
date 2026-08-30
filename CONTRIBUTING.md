@@ -196,7 +196,7 @@ General Kali scripts belong in:
 scripts/kali/
 ```
 
-Optional Kali tool profiles belong in:
+Kali tool profiles belong in:
 
 ```text
 scripts/kali/profiles/
@@ -277,12 +277,13 @@ Do not introduce CRLF line endings into Bash scripts.
 
 Internal Markdown links must resolve correctly.
 
-When linking between files in `docs/`, use relative Markdown links.
+When linking between files in `docs/`, use relative Markdown links from the
+current guide.
 
 Example:
 
 ```markdown
-[VMware Networking](docs/19-vmware-networking.md)
+19-vmware-networking.md
 ```
 
 From the root README, include the `docs/` path.
@@ -318,17 +319,21 @@ version number.
 
 Before opening a pull request, run the validation relevant to your change.
 
-At minimum, contributors should verify:
+Depending on the scope of the change, relevant checks include:
 
 - Internal Markdown links
-- Script path references
+- Documented repository paths
 - PowerShell parser results
+- PSScriptAnalyzer
 - Bash syntax
 - ShellCheck
-- Sensitive-data scans
-- Forbidden-artifact scans
+- Repository safety validation
+- Sensitive-data and forbidden-artifact scans
 - Line endings
 - `git diff --check`
+
+Do not claim that a check was performed when it was not applicable or was not
+actually run.
 
 If a contribution changes an installation or runtime script, test it in an
 authorized disposable or recoverable environment when practical.

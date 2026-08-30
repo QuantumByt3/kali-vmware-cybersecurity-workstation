@@ -9,7 +9,7 @@ body:
 
         Use this form for ordinary, non-sensitive bugs.
 
-        **Do not use a public issue to report a security vulnerability, exposed credential, private key, token, private network information, or other sensitive data.** Follow the repository's [Security Policy](../../SECURITY.md) instead.
+        **Do not use a public issue to report a security vulnerability, exposed credential, private key, token, private network information, or other sensitive data.** Follow the repository's [Security Policy](https://github.com/QuantumByt3/kali-vmware-cybersecurity-workstation/security/policy) instead.
 
   - type: dropdown
     id: area
