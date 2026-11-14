@@ -1,5 +1,7 @@
 # Kali VMware Cybersecurity Workstation
 
+[Portfolio — Joe B. | QuantumByt3](https://www.quantumbyt3.com)
+
 A beginner-friendly, security-first guide for building a complete Kali Linux
 cybersecurity workstation in VMware Workstation Pro on Windows 11.
 
